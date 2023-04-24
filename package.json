@@ -1,0 +1,23 @@
+{
+  "name": "helloworld",
+  "version": "1.0.0",
+  "description": "My very first JS project",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "mocha test/**/*.test.js --exit"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^9.0.0",
+    "mocha": "^10.2.0",
+    "tracer": "^1.1.6"
+  },
+  "devDependencies": {
+    "chai-http": "^4.3.0",
+    "nodemon": "^2.0.22"
+  }
+}
