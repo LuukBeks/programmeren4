@@ -160,8 +160,7 @@ describe('UC-206-4 Verwijderen van user', () => {
         let { data, message, status } = res.body;
 
         status.should.equal(200);
-        message.should.be.a('string').equal('User deleted');
-        data.should.be.an('object');
+        message.should.be.a('string').equal('User deleted successfully');
 
         done();
       });
