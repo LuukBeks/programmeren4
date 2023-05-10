@@ -1,6 +1,6 @@
-const express = require('express');
-const logger = require('./src/util/utils').logger;
-const userRoutes = require('./src/routes/user.routes');
+const express = require("express");
+const logger = require("./src/util/utils").logger;
+const userRoutes = require("./src/routes/user.routes");
 
 const app = express();
 const port = 3000;
@@ -8,7 +8,7 @@ const port = 3000;
 // For access to application/json request body
 app.use(express.json());
 
-app.use('*', (req, res, next) => {
+app.use("*", (req, res, next) => {
   const method = req.method;
   logger.trace(`Methode ${method} is aangeroepen`);
   next();
@@ -20,33 +20,33 @@ let index = database.users.length;
 
 // Algemene route, vangt alle http-methods en alle URLs af, print
 // een message, en ga naar de next URL (indien die matcht)!
-app.use('*', (req, res, next) => {
+app.use("*", (req, res, next) => {
   const method = req.method;
   console.log(`Methode ${method} is aangeroepen`);
   next();
 });
 
 // Info endpoints
-app.get('/api/info', (req, res) => {
+app.get("/api/info", (req, res) => {
   res.status(201).json({
     status: 201,
-    message: 'Server info-endpoint',
+    message: "Server info-endpoint",
     data: {
-      studentName: 'Luuk',
+      studentName: "Luuk",
       studentNumber: 1234567,
-      description: 'Welkom bij de server API van de share a meal.'
-    }
+      description: "Welkom bij de server API van de share a meal.",
+    },
   });
 });
 
-app.use('/api/user', userRoutes);
+app.use("/api/user", userRoutes);
 
-app.use('*', (req, res) => {
-  logger.warn('invalid endpoint called', req.path);
+app.use("*", (req, res) => {
+  logger.warn("invalid endpoint called", req.path);
   res.status(404).json({
     status: 404,
-    message: 'Endpoint not found',
-    data: {}
+    message: "Endpoint not found",
+    data: {},
   });
 });
 
@@ -55,7 +55,7 @@ app.use((err, req, res, next) => {
   res.status(err.code).json({
     statusCode: err.code,
     message: err.message,
-    data: {}
+    data: {},
   });
 });
 
@@ -64,7 +64,6 @@ app.listen(port, () => {
 });
 
 module.exports = app;
-
 
 // // UC-201 Registreren als nieuwe user
 // app.post('/api/user', (req, res) => {
@@ -200,7 +199,7 @@ module.exports = app;
 //   // er moet precies 1 response verstuurd worden.
 //   const userId = req.params.userId;
 //   const user = database.users.find(user => user.id.toString() === userId);
-  
+
 //   if (!user) {
 //     logger.error(`No user found for userId '${userId}'`);
 //     // If no user found for given userId, return 404 Not Found error
@@ -210,7 +209,7 @@ module.exports = app;
 //       data: null
 //     });
 //   }
-  
+
 //   res.status(200).json({
 //     status: 200,
 //     message: 'User getById endpoint',
@@ -223,7 +222,7 @@ module.exports = app;
 //   const userId = req.params.userId;
 //   const userData = req.body;
 //   const userIndex = database.users.findIndex(user => user.id.toString() === userId);
-  
+
 //   if (userIndex === -1) {
 //     // If no user found for given userId, return 404 Not Found error
 //     return res.status(404).json({
@@ -232,13 +231,13 @@ module.exports = app;
 //       data: null
 //     });
 //   }
-  
+
 //   // Update user data in the database
 //   database.users[userIndex] = {
 //     ...database.users[userIndex],
 //     ...userData
 //   };
-  
+
 //   res.status(200).json({
 //     status: 200,
 //     message: `User with userId '${userId}' updated successfully`,
@@ -262,7 +261,7 @@ module.exports = app;
 //       data: null
 //     });
 //   }
-  
+
 //   // Remove user from the database
 //   database.users.splice(userIndex, 1);
 //   logger.info('User deleted successfully');
