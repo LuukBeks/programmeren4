@@ -232,8 +232,7 @@ const userController = {
     const { firstname, lastname, email, password, phonenumber, active } =
       req.body;
 
-    let sqlStatement =
-      "UPDATE `user` SET firstname = ?, lastname = ?, email = ?, password = ?, phonenumber = ?, active = ? WHERE id = ?";
+    let sqlStatement = "UPDATE `user` SET `firstName` = ?, `lastName` = ?, `isActive` = ?, `emailAdress` = ?, `password` = ?, `phoneNumber` = ?, `roles` = ?, `street` = ?, `city` = ? WHERE `id` = ?";
 
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -245,14 +244,12 @@ const userController = {
         });
         return; // stop execution if there's an error
       }
-
       try {
         assert(typeof firstname === "string", "firstname must be a string");
         assert(typeof lastname === "string", "lastname must be a string");
         assert(typeof email === "string", "email must be a string");
         assert(typeof password === "string", "password must be a string");
         assert(typeof phonenumber === "string", "phonenumber must be a string");
-        assert(typeof active === "boolean", "active must be a boolean");
       } catch (err) {
         logger.warn(err.message.toString());
 

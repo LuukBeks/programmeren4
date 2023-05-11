@@ -12,7 +12,7 @@ router.get("/api/user", userController.getAllUsers);
 router.get("/api/user/profile", userController.getUserProfile);
 
 // UC-204 Ophalen van gebruikersprofiel op basis van id
-router.get("api/user/:id", userController.getUserProfileById);
+router.get("/api/user/:id", userController.getUserProfileById);
 
 // UC-205 Wijzigen van gebruikersprofiel
 router.put("/api/user/:id", userController.updateUserProfile);
