@@ -26,7 +26,7 @@ app.get('/api/info', (req, res) => {
   });
 });
 
-app.use('/api/user', userRoutes);
+app.use('', userRoutes);
 
 app.use('*', (req, res) => {
   logger.warn('Invalid endpoint called: ', req.path);
