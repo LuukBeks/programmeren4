@@ -4,12 +4,12 @@ const assert = require("assert");
 const pool = require("../util/database");
 
 const userController = {
-   // uc 201
+  // uc 201
   createUser(req, res, next) {
     logger.info("Register user");
 
     let sqlStatement =
-      "INSERT INTO user (firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO user (firstName, lastName, isActive, emailAdressIndex, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -22,14 +22,36 @@ const userController = {
       }
       if (conn) {
         try {
-          assert(typeof req.body.firstname === "string", "firstname must be a string");
-          assert(typeof req.body.lastname === "string", "lastname must be a string");
+          assert(
+            typeof req.body.firstname === "string",
+            "firstname must be a string"
+          );
+          assert(
+            typeof req.body.lastname === "string",
+            "lastname must be a string"
+          );
           assert(typeof req.body.email === "string", "email must be a string");
-          assert(typeof req.body.password === "string", "password must be a string");
-          assert(typeof req.body.phonenumber === "string", "phonenumber must be a string");          assert(typeof req.body.street === "string", "street must be a string");
+          assert(
+            typeof req.body.password === "string",
+            "password must be a string"
+          );
+          assert(
+            typeof req.body.phonenumber === "string",
+            "phonenumber must be a string"
+          );
+          assert(
+            typeof req.body.street === "string",
+            "street must be a string"
+          );
           assert(typeof req.body.city === "string", "city must be a string");
-          assert(typeof req.body.roles === "string", "roles must be a admin, editor or guest, choose one or multiple");
-          assert(typeof req.body.isActive === "tinyint", "isActive must be a tinyint, 1 or 0");
+          assert(
+            typeof req.body.roles === "string",
+            "roles must be a admin, editor or guest, choose one or multiple"
+          );
+          assert(
+            Number.isInteger(req.body.isActive),
+            "isActive must be an integer, 1 or 0"
+          );
         } catch (err) {
           logger.warn(err.message.toString());
 
@@ -64,9 +86,9 @@ const userController = {
             }
             if (results) {
               logger.info("Found", results.length, "results");
-              res.status(200).json({
-                statusCode: 200,
-                message: "User getAll endpoint",
+              res.status(201).json({
+                statusCode: 201,
+                message: "User successfully created",
                 data: results,
               });
             }
@@ -77,8 +99,8 @@ const userController = {
     });
   },
 
-   // uc 202
-   getAllUsers: (req, res, next) => {
+  // uc 202
+  getAllUsers: (req, res, next) => {
     logger.info("Get all users");
 
     let sqlStatement = "SELECT * FROM `user`";
