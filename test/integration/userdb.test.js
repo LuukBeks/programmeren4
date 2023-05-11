@@ -1,3 +1,4 @@
+// NOG NIET AF
 process.env["DB_DATABASE"] = process.env.DB_DATABASE || "shareameal-testdb";
 const chai = require("chai");
 const chaiHttp = require("chai-http");
@@ -19,7 +20,7 @@ const CLEAR_DB =
 
 const INSERT_USER =
   "INSERT INTO `user` (`id`, `firstName`, `lastName`, `emailAdress`, `password`, `street`, `city` ) VALUES" +
-  '(1, "first", "last", "name@server.nl", "secret", "street", "city");';
+  '(6, "John", "Doe", "john.doe@example.com", "secret", "street", "Amsterdam");';
 
 // describe("UC-201 Registreren als nieuwe user", () => {
 //   beforeEach((done) => {
@@ -162,7 +163,7 @@ describe("UC-204 Opvragen van gebruikersprofiel bij id", () => {
 
   it("TC-204-1 - Get user profile by id", (done) => {
     // Define the user ID to retrieve
-    const userID = 1;
+    const userID = 6;
 
     // Make a GET request to retrieve the user profile
     chai
@@ -189,17 +190,18 @@ describe("UC-204 Opvragen van gebruikersprofiel bij id", () => {
         const user = res.body.data[0];
         user.should.have.keys(
           "id",
-          "name",
-          "email",
+          "firstname",
+          "lastname",
+          "emailAdress",
           "password",
+          "phoneNumber",
           "city",
           "isActive",
-          "created_at",
-          "updated_at"
+          "street"
         );
         user.id.should.equal(userID);
-        user.name.should.equal("John Doe");
-        user.email.should.equal("john.doe@example.com");
+        user.firstname.should.equal("John");
+        user.emailAdress.should.equal("john.doe@example.com");
         user.city.should.equal("Amsterdam");
         user.isActive.should.equal(true);
 
