@@ -5,11 +5,11 @@ const pool = require("../util/database");
 
 const userController = {
    // uc 201
-  createUser(req, res) {
+  createUser(req, res, next) {
     logger.info("Register user");
 
     let sqlStatement =
-      "INSERT INTO `user` (firstname, lastname, email, password, phonenumber, active) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO user (firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -22,27 +22,14 @@ const userController = {
       }
       if (conn) {
         try {
-          assert(
-            typeof req.body.firstname === "string",
-            "firstname must be a string"
-          );
-          assert(
-            typeof req.body.lastname === "string",
-            "lastname must be a string"
-          );
+          assert(typeof req.body.firstname === "string", "firstname must be a string");
+          assert(typeof req.body.lastname === "string", "lastname must be a string");
           assert(typeof req.body.email === "string", "email must be a string");
-          assert(
-            typeof req.body.password === "string",
-            "password must be a string"
-          );
-          assert(
-            typeof req.body.phonenumber === "string",
-            "phonenumber must be a string"
-          );
-          assert(
-            typeof req.body.active === "boolean",
-            "active must be a boolean"
-          );
+          assert(typeof req.body.password === "string", "password must be a string");
+          assert(typeof req.body.phonenumber === "string", "phonenumber must be a string");          assert(typeof req.body.street === "string", "street must be a string");
+          assert(typeof req.body.city === "string", "city must be a string");
+          assert(typeof req.body.roles === "string", "roles must be a admin, editor or guest, choose one or multiple");
+          assert(typeof req.body.isActive === "tinyint", "isActive must be a tinyint, 1 or 0");
         } catch (err) {
           logger.warn(err.message.toString());
 
@@ -56,12 +43,15 @@ const userController = {
         conn.query(
           sqlStatement,
           [
-            req.body.firstname,
-            req.body.lastname,
-            req.body.email,
+            req.body.firstName,
+            req.body.lastName,
+            req.body.isActive,
+            req.body.emailAdress,
             req.body.password,
-            req.body.phonenumber,
-            req.body.active,
+            req.body.phoneNumber,
+            req.body.roles,
+            req.body.street,
+            req.body.city,
           ],
           function (err, results, fields) {
             if (err) {
