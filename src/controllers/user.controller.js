@@ -9,7 +9,7 @@ const userController = {
     logger.info("Register user");
 
     let sqlStatement =
-      "INSERT INTO user (firstName, lastName, isActive, emailAdressIndex, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO user (firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -23,35 +23,35 @@ const userController = {
       if (conn) {
         try {
           assert(
-            typeof req.body.firstname === "string",
+            typeof req.body.firstName === "string",
             "firstname must be a string"
           );
-          assert(
-            typeof req.body.lastname === "string",
-            "lastname must be a string"
-          );
-          assert(typeof req.body.email === "string", "email must be a string");
-          assert(
-            typeof req.body.password === "string",
-            "password must be a string"
-          );
-          assert(
-            typeof req.body.phonenumber === "string",
-            "phonenumber must be a string"
-          );
-          assert(
-            typeof req.body.street === "string",
-            "street must be a string"
-          );
-          assert(typeof req.body.city === "string", "city must be a string");
-          assert(
-            typeof req.body.roles === "string",
-            "roles must be a admin, editor or guest, choose one or multiple"
-          );
-          assert(
-            Number.isInteger(req.body.isActive),
-            "isActive must be an integer, 1 or 0"
-          );
+          // assert(
+          //   typeof req.body.lastName === "string",
+          //   "lastname must be a string"
+          // );
+          // assert(typeof req.body.emailAdress === "string", "email must be a string");
+          // assert(
+          //   typeof req.body.password === "string",
+          //   "password must be a string"
+          // );
+          // assert(
+          //   typeof req.body.phoneNumber === "string",
+          //   "phonenumber must be a string"
+          // );
+          // assert(
+          //   typeof req.body.street === "string",
+          //   "street must be a string"
+          // );
+          // assert(typeof req.body.city === "string", "city must be a string");
+          // assert(
+          //   typeof req.body.roles === "string",
+          //   "roles must be a admin, editor or guest, choose one or multiple"
+          // );
+          // assert(
+          //   Number.isInteger(req.body.isActive),
+          //   "isActive must be an integer, 1 or 0"
+          // );
         } catch (err) {
           logger.warn(err.message.toString());
 
