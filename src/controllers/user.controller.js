@@ -9,50 +9,28 @@ const userController = {
     logger.info("Get all users");
 
     let sqlStatement = "SELECT * FROM `user`";
-
-    const activeValue = req.query.active;
-    const firstnameValue = req.query.firstname;
-
-    if (activeValue || firstnameValue) {
-      sqlStatement += " WHERE ";
-      const conditions = [];
-
-      if (activeValue) {
-        conditions.push("active = ?");
-      }
-
-      if (firstnameValue) {
-        conditions.push("firstname = ?");
-      }
-
-      sqlStatement += conditions.join(" AND ");
+    // Hier wil je misschien iets doen met mogelijke filterwaarden waarop je zoekt.
+    if (req.query.isactive) {
+      // voeg de benodigde SQL code toe aan het sql statement
+      // bv sqlStatement += " WHERE `isActive=?`"
     }
-
+    logger.info("sqlStatement", sqlStatement);
     pool.getConnection(function (err, conn) {
+      // Do something with the connection
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         next({
           code: 500,
-          message: err.code.toString(),
-          data: {},
+          message: err.code,
         });
       }
       if (conn) {
-        const values = [];
-        if (activeValue) {
-          values.push(activeValue);
-        }
-        if (firstnameValue) {
-          values.push(firstnameValue);
-        }
-
-        conn.query(sqlStatement, values, function (err, results, fields) {
+        conn.query(sqlStatement, function (err, results, fields) {
           if (err) {
-            logger.error(err.message);
+            logger.err(err.message);
             next({
               code: 409,
-              message: err.message.toString(),
-              data: {},
+              message: err.message,
             });
           }
           if (results) {
@@ -152,7 +130,7 @@ const userController = {
     });
   },
 
-  //
+  // uc 206
   deleteUser: (req, res, next) => {
     logger.info("Delete user");
 
@@ -200,12 +178,13 @@ const userController = {
   },
 
   // uc 203 opvragen van gebruikersprofiel (ingelogde gebruiker)
-  getUserProfile: (req, res) => {
-    logger.info("Get user profile");
+  getUserProfile: (req, res, next) => {
+    logger.info("Getting user profile");
 
     let sqlStatement = "SELECT * FROM `user` WHERE id = 1";
-
+    logger.info("sqlStatement", sqlStatement);
     pool.getConnection(function (err, conn) {
+      logger.info("trying to connect to database");
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         next({
@@ -215,6 +194,7 @@ const userController = {
         });
       }
       if (conn) {
+        logger.info("Connected to database");
         conn.query(sqlStatement, function (err, results, fields) {
           if (err) {
             logger.error(err.message);

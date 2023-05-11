@@ -1,4 +1,3 @@
-// get the client
 const mysql = require('mysql2');
 const logger = require('../util/utils').logger;
 
@@ -8,6 +7,8 @@ const pool = mysql.createPool({
   user: 'root',
   database: 'shareameal',
   port: 3306,
+  password:'',
+  multipleStatements: true,
   waitForConnections: true,
   connectionLimit: 10,
   maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
@@ -17,16 +18,16 @@ const pool = mysql.createPool({
 
 pool.on('connection', function (connection) {
   logger.debug(
-    `connected to db ${connection.config.database} on ${connection.config.host}`
+    `Connected to db '${connection.config.database}' on ${connection.config.host}`
   );
 });
 
 pool.on('acquire', function (connection) {
-  logger.debug(`Connection %d acquired`, connection.threadId);
+  logger.debug('Connection %d acquired', connection.threadId);
 });
 
 pool.on('release', function (connection) {
-  logger.debug(`Connection %d released`, connection.threadId);
+  logger.debug('Connection %d released', connection.threadId);
 });
 
-module.exports = pool.promise();
+module.exports = pool;
