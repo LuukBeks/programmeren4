@@ -4,13 +4,10 @@ const assert = require("assert");
 const pool = require("../util/database");
 
 const userController = {
-  // uc 201
   createUser(req, res, next) {
     logger.info("Register user");
-
     let sqlStatement =
       "INSERT INTO user (firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
@@ -19,42 +16,43 @@ const userController = {
           message: err.code.toString(),
           data: {},
         });
-      }
-      if (conn) {
+      } else {
         try {
           assert(
             typeof req.body.firstName === "string",
             "firstname must be a string"
           );
-          // assert(
-          //   typeof req.body.lastName === "string",
-          //   "lastname must be a string"
-          // );
-          // assert(typeof req.body.emailAdress === "string", "email must be a string");
-          // assert(
-          //   typeof req.body.password === "string",
-          //   "password must be a string"
-          // );
-          // assert(
-          //   typeof req.body.phoneNumber === "string",
-          //   "phonenumber must be a string"
-          // );
-          // assert(
-          //   typeof req.body.street === "string",
-          //   "street must be a string"
-          // );
-          // assert(typeof req.body.city === "string", "city must be a string");
-          // assert(
-          //   typeof req.body.roles === "string",
-          //   "roles must be a admin, editor or guest, choose one or multiple"
-          // );
-          // assert(
-          //   Number.isInteger(req.body.isActive),
-          //   "isActive must be an integer, 1 or 0"
-          // );
+          assert(
+            typeof req.body.lastName === "string",
+            "lastname must be a string"
+          );
+          assert(
+            typeof req.body.emailAdress === "string",
+            "email must be a string"
+          );
+          assert(
+            typeof req.body.password === "string",
+            "password must be a string"
+          );
+          assert(
+            typeof req.body.phoneNumber === "string",
+            "phonenumber must be a string"
+          );
+          assert(
+            typeof req.body.street === "string",
+            "street must be a string"
+          );
+          assert(typeof req.body.city === "string", "city must be a string");
+          assert(
+            typeof req.body.roles === "string",
+            "roles must be an admin, editor, or guest; choose one or multiple"
+          );
+          assert(
+            Number.isInteger(req.body.isActive),
+            "isActive must be an integer, 1 or 0"
+          );
         } catch (err) {
           logger.warn(err.message.toString());
-
           res.status(400).json({
             statusCode: 400,
             message: err.message.toString(),
@@ -62,39 +60,65 @@ const userController = {
           });
           return;
         }
+
+        // Check if email already exists
         conn.query(
-          sqlStatement,
-          [
-            req.body.firstName,
-            req.body.lastName,
-            req.body.isActive,
-            req.body.emailAdress,
-            req.body.password,
-            req.body.phoneNumber,
-            req.body.roles,
-            req.body.street,
-            req.body.city,
-          ],
+          "SELECT emailAdress FROM user WHERE emailAdress = ?",
+          [req.body.emailAdress],
           function (err, results, fields) {
             if (err) {
               logger.error(err.message);
               next({
-                code: 409,
+                code: 500,
                 message: err.message.toString(),
                 data: {},
               });
+            } else {
+              if (results.length > 0) {
+                // Email already exists
+                res.status(409).json({
+                  statusCode: 409,
+                  message: "Email address already exists",
+                  data: {},
+                });
+              } else {
+                // Email does not exist, proceed with user creation
+                conn.query(
+                  sqlStatement,
+                  [
+                    req.body.firstName,
+                    req.body.lastName,
+                    req.body.isActive,
+                    req.body.emailAdress,
+                    req.body.password,
+                    req.body.phoneNumber,
+                    req.body.roles,
+                    req.body.street,
+                    req.body.city,
+                  ],
+                  function (err, results, fields) {
+                    if (err) {
+                      logger.error(err.message);
+                      next({
+                        code: 500,
+                        message: err.message.toString(),
+                        data: {},
+                      });
+                    } else {
+                      logger.info("Found", results.length, "results");
+                      res.status(201).json({
+                        statusCode: 201,
+                        message: "User successfully created",
+                        data: results,
+                      });
+                    }
+                  }
+                );
+              }
             }
-            if (results) {
-              logger.info("Found", results.length, "results");
-              res.status(201).json({
-                statusCode: 201,
-                message: "User successfully created",
-                data: results,
-              });
-            }
+            conn.release();
           }
         );
-        pool.releaseConnection(conn);
       }
     });
   },
@@ -224,16 +248,14 @@ const userController = {
     });
   },
 
-  // uc 205 wijzigen van usergegevens
-  updateUserProfile: (req, res, next) => {
-    logger.info("Update user profile");
-
-    const userId = req.params.id; // assuming you have the user ID in the request parameters
-    const { firstname, lastname, email, password, phonenumber, active } =
-      req.body;
-
-    let sqlStatement = "UPDATE `user` SET `firstName` = ?, `lastName` = ?, `isActive` = ?, `emailAdress` = ?, `password` = ?, `phoneNumber` = ?, `roles` = ?, `street` = ?, `city` = ? WHERE `id` = ?";
-
+  updateUserProfile(req, res, next) {
+    logger.info(`Updating user ${req.params.id}`);
+    let sqlStatement =
+      "UPDATE user SET firstName = ?, lastName = ?, isActive = ?, emailAdress = ?, password = ?, phoneNumber = ?, roles = ?, street = ?, city = ? WHERE id = ?";
+    
+    // Add the select statement to check if email already exists
+    let emailCheckStatement = "SELECT COUNT(*) AS count FROM user WHERE emailAdress = ? AND id <> ?";
+    
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
@@ -242,49 +264,107 @@ const userController = {
           message: err.code.toString(),
           data: {},
         });
-        return; // stop execution if there's an error
-      }
-      try {
-        assert(typeof firstname === "string", "firstname must be a string");
-        assert(typeof lastname === "string", "lastname must be a string");
-        assert(typeof email === "string", "email must be a string");
-        assert(typeof password === "string", "password must be a string");
-        assert(typeof phonenumber === "string", "phonenumber must be a string");
-      } catch (err) {
-        logger.warn(err.message.toString());
-
-        res.status(400).json({
-          statusCode: 400,
-          message: err.message.toString(),
-          data: {},
-        });
-        return; // stop execution if there's an error
-      }
-
-      conn.query(
-        sqlStatement,
-        [firstname, lastname, email, password, phonenumber, active, userId],
-        function (err, results, fields) {
+      } else {
+        try {
+          assert(
+            typeof req.body.firstName === "string",
+            "firstname must be a string"
+          );
+          assert(
+            typeof req.body.lastName === "string",
+            "lastname must be a string"
+          );
+          assert(
+            typeof req.body.emailAdress === "string",
+            "email must be a string"
+          );
+          assert(
+            typeof req.body.password === "string",
+            "password must be a string"
+          );
+          assert(
+            typeof req.body.phoneNumber === "string",
+            "phonenumber must be a string"
+          );
+          assert(
+            typeof req.body.street === "string",
+            "street must be a string"
+          );
+          assert(typeof req.body.city === "string", "city must be a string");
+          assert(
+            typeof req.body.roles === "string",
+            "roles must be admin, editor, or guest; choose one or multiple"
+          );
+          assert(
+            Number.isInteger(req.body.isActive),
+            "isActive must be an integer, 1 or 0"
+          );
+        } catch (err) {
+          logger.warn(err.message.toString());
+          res.status(400).json({
+            statusCode: 400,
+            message: err.message.toString(),
+            data: {},
+          });
+          return;
+        }
+        
+        // Execute the email check query first
+        conn.query(emailCheckStatement, [req.body.emailAdress, req.params.id], function (err, emailCheckResults) {
           if (err) {
             logger.error(err.message);
             next({
-              code: 409,
+              code: 500,
               message: err.message.toString(),
               data: {},
             });
-            return; // stop execution if there's an error
+          } else {
+            if (emailCheckResults[0].count > 0) {
+              // Email already exists
+              res.status(409).json({
+                statusCode: 409,
+                message: "Email already exists",
+                data: {},
+              });
+            } else {
+              // Email does not exist, proceed with the update query
+              conn.query(
+                sqlStatement,
+                [
+                  req.body.firstName,
+                  req.body.lastName,
+                  req.body.isActive,
+                  req.body.emailAdress,
+                  req.body.password,
+                  req.body.phoneNumber,
+                  req.body.roles,
+                  req.body.street,
+                  req.body.city,
+                  req.params.id,
+                ],
+                function (err, results, fields) {
+                  if (err) {
+                    logger.error(err.message);
+                    next({
+                      code: 409,
+                      message: err.message.toString(),
+                      data: {},
+                    });
+                  } else {
+                    logger.info("Found", results.affectedRows, "rows affected");
+                    res.status(200).json({
+                      statusCode: 200,
+                      message: "User profile updated",
+                      data: results,
+                    });
+                  }
+                }
+              );
+            }
           }
-
-          logger.info("Updated user profile for user", userId);
-          res.status(200).json({
-            statusCode: 200,
-            message: "User profile updated",
-            data: {},
-          });
-
-          conn.release(); // release the connection back to the pool
-        }
-      );
+        });
+        conn.release();
+      }
     });
   },
 
@@ -335,7 +415,5 @@ const userController = {
     });
   },
 };
-
-
 
 module.exports = userController;

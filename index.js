@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("./src/util/utils").logger;
 const userRoutes = require("./src/routes/user.routes.js");
+const mealRoutes = require("./src/routes/meal.routes.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
