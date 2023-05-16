@@ -6,6 +6,6 @@ const authController = require("../controllers/auth.controller");
 // UC-201 Registreren als nieuwe user
 router.get("", mealController.getAllMeals);
 
-router.delete("/:mealId", authController.validateToken, mealController.deleteMealById);
+// router.delete("/:mealId", authController.validateToken, mealController.deleteMealById);
 
 module.exports = router;
