@@ -7,5 +7,6 @@ module.exports = {
             data.title = data.title.toUpperCase();
         }
     }),
+    jwtSecretKey: process.env.JWT_SECRET || 'kljasdfoijqawtl,mnzfsg'
 
 }

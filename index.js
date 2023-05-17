@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("./src/util/utils").logger;
 const userRoutes = require("./src/routes/user.routes.js");
 const mealRoutes = require("./src/routes/meal.routes.js");
+const authRoutes = require("./src/routes/auth.routes.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -27,7 +28,8 @@ app.get('/api/info', (req, res) => {
   });
 });
 
-app.use('', userRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api', authRoutes);
 
 app.use('*', (req, res) => {
   logger.warn('Invalid endpoint called: ', req.path);

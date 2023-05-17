@@ -168,37 +168,34 @@ const userController = {
 
   // uc 203 opvragen van gebruikersprofiel (ingelogde gebruiker)
   getUserProfile: (req, res, next) => {
-    logger.info("Getting user profile");
+    logger.trace('Get user profile for user', req.userId);
 
-    let sqlStatement = "SELECT * FROM `user` WHERE id = 1";
-    logger.info("sqlStatement", sqlStatement);
+    let sqlStatement = 'SELECT * FROM `user` WHERE id=?';
+
     pool.getConnection(function (err, conn) {
-      logger.info("trying to connect to database");
+      // Do something with the connection
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         next({
           code: 500,
-          message: err.code.toString(),
-          data: {},
+          message: err.code
         });
       }
       if (conn) {
-        logger.info("Connected to database");
-        conn.query(sqlStatement, function (err, results, fields) {
+        conn.query(sqlStatement, [req.userId], (err, results, fields) => {
           if (err) {
             logger.error(err.message);
             next({
               code: 409,
-              message: err.message.toString(),
-              data: {},
+              message: err.message
             });
           }
           if (results) {
-            logger.info("Found", results.length, "results");
+            logger.trace('Found', results.length, 'results');
             res.status(200).json({
-              statusCode: 200,
-              message: "User getAll endpoint",
-              data: results,
+              code: 200,
+              message: 'Get User profile',
+              data: results[0]
             });
           }
         });
