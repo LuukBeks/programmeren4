@@ -3,9 +3,14 @@ const router = express.Router();
 const mealController = require("../controllers/meal.controller");
 const authController = require("../controllers/auth.controller");
 
-// UC-201 Registreren als nieuwe user
-router.get("", mealController.getAllMeals);
+router.post("", authController.validateToken, mealController.createMeal);
 
-// router.delete("/:mealId", authController.validateToken, mealController.deleteMealById);
+router.put("/:mealId", authController.validateToken, mealController.updateMeal);
+
+router.get("", authController.validateToken, mealController.getAllMeals);
+
+router.get("/:mealId", mealController.getMealById);
+
+router.delete("/:mealId", authController.validateToken, mealController.deleteMeal);
 
 module.exports = router;

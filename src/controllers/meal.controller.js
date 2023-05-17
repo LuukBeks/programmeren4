@@ -54,10 +54,10 @@ const mealController = {
   },
 
   // uc 304 opvragen van een maaltijd bij id
-  updateMealById: (req, res, next) => {},
+  getMealById: (req, res, next) => {},
 
   // uc 305 verwijderen van een maaltijd bij id
-  deleteMealById: (req, res, next) => {
+  deleteMeal: (req, res, next) => {
     const mealId = req.params.mealId;
     const userId = req.user.userId;
     logger.trace("Deleting meal by id = ", mealId, "by user", userId);
