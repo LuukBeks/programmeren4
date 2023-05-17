@@ -30,6 +30,7 @@ app.get('/api/info', (req, res) => {
 
 app.use('/api/user', userRoutes);
 app.use('/api', authRoutes);
+app.use('/api/meal', mealRoutes);
 
 app.use('*', (req, res) => {
   logger.warn('Invalid endpoint called: ', req.path);
