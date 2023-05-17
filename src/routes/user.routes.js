@@ -10,7 +10,7 @@ router.post("", userController.createUser);
 router.get("", userController.getAllUsers);
 
 // UC-203 Ophalen van gebruikersprofiel
-router.get("/profile", authController.validateToken, authController.validateLogin, userController.getUserProfile,);
+router.get("/profile", authController.validateToken, userController.getUserProfile,);
 
 // UC-204 Ophalen van gebruikersprofiel op basis van id
 router.get("/:id", userController.getUserProfileById);
