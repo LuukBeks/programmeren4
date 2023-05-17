@@ -7,7 +7,7 @@ router.post("", authController.validateToken, mealController.createMeal);
 
 router.put("/:mealId", authController.validateToken, mealController.updateMeal);
 
-router.get("", authController.validateToken, mealController.getAllMeals);
+router.get("", mealController.getAllMeals);
 
 router.get("/:mealId", mealController.getMealById);
 

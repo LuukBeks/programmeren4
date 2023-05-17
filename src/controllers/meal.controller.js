@@ -8,7 +8,10 @@ const mealController = {
   createMeal: (req, res, next) => {},
 
   // uc 302 Wijzigen van maaltijdgegevens
-  updateMeal: (req, res, next) => {},
+  updateMeal: (req, res, next) => {
+    logger.info("Update meal by id");
+    const mealId = req.params.mealId;
+  },
 
   // uc 303 opvragen van alle maaltijden
   getAllMeals: (req, res, next) => {
@@ -54,10 +57,45 @@ const mealController = {
   },
 
   // uc 304 opvragen van een maaltijd bij id
-  getMealById: (req, res, next) => {},
+  getMealById: (req, res, next) => {
+    logger.info("Get meal by id");
+    const mealId = req.params.mealId;
+    logger.trace("Meal id = ", mealId);
+    let sqlStatement = "SELECT * FROM `meal` WHERE `id`=?";
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error(err.code, err.syscall, err.address, err.port);
+        next({
+          code: 500,
+          message: err.code,
+        });
+      }
+      if (conn) {
+        conn.query(sqlStatement, [mealId], function (err, results, fields) {
+          if (err) {
+            logger.error(err.message);
+            next({
+              code: 409,
+              message: err.message,
+            });
+          }
+          if (results) {
+            logger.info("Found", results.length, "results");
+            res.status(200).json({
+              statusCode: 200,
+              message: "Meal getById endpoint",
+              data: results,
+            });
+          }
+        });
+        pool.releaseConnection(conn);
+      }
+    });
+  },
 
   // uc 305 verwijderen van een maaltijd bij id
   deleteMeal: (req, res, next) => {
+    logger.info("Delete meal by id");
     const mealId = req.params.mealId;
     const userId = req.user.userId;
     logger.trace("Deleting meal by id = ", mealId, "by user", userId);
