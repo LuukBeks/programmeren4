@@ -117,41 +117,41 @@ module.exports = {
   },
 
   validateToken(req, res, next) {
-    logger.info('validateToken called');
+    logger.info("validateToken called");
     // logger.trace(req.headers)
     // The headers should contain the authorization-field with value 'Bearer [token]'
     const authHeader = req.headers.authorization;
-    logger.info('AuthHeader:', authHeader)
+    logger.info("AuthHeader:", authHeader);
     if (!authHeader) {
-        logger.info('No authHeader found!')
-        next({
-            code: 401,
-            message: 'Authorization header missing!',
-            data: undefined
-        });
+      logger.info("No authHeader found!");
+      next({
+        code: 401,
+        message: "Authorization header missing!",
+        data: undefined,
+      });
     } else {
-        /**
-         * We hebben de headers. Lees het token daaruit, valideer het token
-         * en lees de payload daaruit. De userId uit de payload stop je in de req,
-         * en ga naar de volgende endpoint.
-         */
+      /**
+       * We hebben de headers. Lees het token daaruit, valideer het token
+       * en lees de payload daaruit. De userId uit de payload stop je in de req,
+       * en ga naar de volgende endpoint.
+       */
 
-        const token = authHeader.substring(7, authHeader.length)
-        const payload = jwt.decode(token); // Decode the payload
+      const token = authHeader.substring(7, authHeader.length);
+      const payload = jwt.decode(token); // Decode the payload
 
-        if (!payload) {
-            logger.info('Invalid token!')
-            next({
-                code: 401,
-                message: 'Invalid token!',
-                data: undefined
-            });
-        } else {
-            // Store the userId in the request object
-            req.userId = payload.userId;
-            logger.info('Payload', payload, 'decoded successfully!')
-            next();
-        }
+      if (!payload) {
+        logger.info("Invalid token!");
+        next({
+          code: 401,
+          message: "Invalid token!",
+          data: undefined,
+        });
+      } else {
+        // Store the userId in the request object
+        req.userId = payload.userId;
+        logger.info("Payload", payload, "decoded successfully!");
+        next();
+      }
     }
-}
+  },
 };

@@ -22,61 +22,6 @@ const INSERT_USER =
   "INSERT INTO `user` (`id`, `firstName`, `lastName`, `emailAdress`, `password`, `street`, `city` ) VALUES" +
   '(6, "John", "Doe", "john.doe@example.com", "secret", "street", "Amsterdam");';
 
-// describe("UC-201 Registreren als nieuwe user", () => {
-//   beforeEach((done) => {
-//     dbconnection
-//       .execute(CLEAR_DB)
-//       .then(() => dbconnection.execute(INSERT_USER))
-//       .then(() => done())
-//       .catch((err) => {
-//         logger.error(err);
-//         done();
-//       });
-//   });
-
-//   it("TC-201-1 - Verplicht veld ontbreekt", (done) => {
-//     // Testen die te maken hebben met authenticatie of het valideren van
-//     // verplichte velden kun je nog niet uitvoeren. Voor het eerste inlevermoment
-//     // mag je die overslaan.
-//     // In een volgende huiswerk opdracht ga je deze tests wel uitwerken.
-//     // Voor nu:
-//     done();
-//   });
-
-//   it("TC-201-5 - User succesvol geregistreerd", (done) => {
-//     // nieuwe user waarmee we testen
-//     const newUser = {
-//       firstName: "Luuk",
-//       lastName: "beks",
-//       emailAdress: "asdua@mail.com",
-//       password: "123",
-//       street: "street",
-//       city: "city",
-//     };
-//     // Voer de test uit
-//     chai
-//       .request(server)
-//       .post("/api/user")
-//       .send(newUser)
-//       .end((err, res) => {
-//         assert(err === null);
-//         res.body.should.be.an("object");
-//         let { data, message, status } = res.body;
-//         status.should.equal(200);
-//         message.should.be.a("string").that.contains("toegevoegd");
-//         data.should.be.an("object");
-//         // Controleren of de data van de nieuwe gebruiker correct is opgeslagen
-//         data.should.include({ firstName: "Luuk" });
-//         data.should.include({ lastName: "beks" });
-//         data.should.include({ emailAdress: "asdua@mail.com" });
-//         data.should.include({ password: "123" });
-//         data.should.include({ street: "street" });
-//         data.should.include({ city: "city" });
-//         done();
-//       });
-//   });
-// });
-
 describe("getAllUsers", () => {
   before((done) => {
     // run any necessary setup before running the tests
