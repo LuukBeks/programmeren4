@@ -128,6 +128,7 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       .send(meal)
       .set("Authorization", "Bearer " + token)
       .end((err, res) => {
+        console.log("foutmelding: " + err);
         res.should.have.status(201);
         res.body.should.have.property("message", "Meal created");
         res.body.should.have.property("data");
@@ -145,7 +146,7 @@ describe("UC-301 Toevoegen van maaltijd", () => {
         res.body.data.meal.should.have.property("description");
         res.body.data.meal.should.have.property("allergenes");
         done();
-        console.log("foutmelding: " + err);
+        
       });
   });
 
