@@ -40,9 +40,6 @@ module.exports = {
             if (results) {
               logger.info("Found", results.length, "results");
 
-              //0 results: geen user, geen toegang
-              //1 result: user gevonden, password checken
-
               if (
                 results.length === 1 &&
                 results[0].password === req.body.password
@@ -76,10 +73,17 @@ module.exports = {
                     logger.info("Payload: ", payload);
                   }
                 );
+              } else if (results.length === 0) {
+                //user niet gevonden
+                next({
+                  code: 404,
+                  message: "User not found",
+                  data: undefined,
+                });
               } else {
                 //user wel gevonden maar password matcht niet
                 next({
-                  code: 401,
+                  code: 400,
                   message: "Not authorized",
                   data: undefined,
                 });
@@ -92,11 +96,12 @@ module.exports = {
     });
   },
 
-  /**
+  /*
    * Validatie functie voor /api/login,
    * valideert of de vereiste body aanwezig is.
    */
   validateLogin(req, res, next) {
+    logger.info("validateLogin called");
     // Verify that we receive the expected input
     try {
       assert(
@@ -109,7 +114,7 @@ module.exports = {
       );
       next();
     } catch (ex) {
-      res.status(422).json({
+      res.status(400).json({
         error: ex.toString(),
         datetime: new Date().toISOString(),
       });

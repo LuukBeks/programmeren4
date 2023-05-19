@@ -13,12 +13,12 @@ router.get("", userController.getAllUsers);
 router.get("/profile", authController.validateToken, userController.getUserProfile,);
 
 // UC-204 Ophalen van gebruikersprofiel op basis van id
-router.get("/:id", userController.getUserProfileById);
+router.get("/:id", authController.validateToken, userController.getUserProfileById);
 
 // UC-205 Wijzigen van gebruikersprofiel
-router.put("/:id", userController.updateUserProfile);
+router.put("/:id", authController.validateToken, userController.updateUserProfile);
 
 // UC-206 Verwijderen van gebruikersprofiel
-router.delete("/:id", userController.deleteUser);
+router.delete("/:id", authController.validateToken, userController.deleteUser);
 
 module.exports = router;
