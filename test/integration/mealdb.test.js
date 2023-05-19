@@ -114,12 +114,12 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVegan: 0,
       isToTakeHome: 0,
       maxAmountOfParticipants: 8,
-      price: "15.99",
-      imageUrl: "https://example.com/image1.jpg",
+      price: "30",
+      imageUrl: "https://example.com/image300.jpg",
       cookId: 1,
-      name: "Meal 1",
-      description: "This is the description for Meal 1",
-      allergenes: "lactose",
+      name: "Meal300",
+      description: "This is the description for Meal 300",
+      allergenes: "gluten",
     };
 
     chai
