@@ -90,6 +90,8 @@ const mealController = {
                 code: 409,
                 message: err.message,
               });
+              console.log("ERRORCODE: " + err);
+              logger.error("ERROR: " +err.code, err.syscall, err.address, err.port);
             }
             if (results) {
               const mealId = results.insertId;
