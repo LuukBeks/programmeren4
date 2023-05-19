@@ -8,7 +8,7 @@ const mealController = {
   createMeal: (req, res, next) => {
     const userId = req.userId;
     var currentDate = new Date();
-    var dateTime = currentDate.toISOString();
+    var dateTime = currentDate.toISOString().slice(0, 19).replace("T", " ");
 
     logger.info("Create new meal, userId: " + userId);
 
