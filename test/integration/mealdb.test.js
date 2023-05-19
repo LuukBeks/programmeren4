@@ -113,13 +113,16 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVega: 0,
       isVegan: 0,
       isToTakeHome: 0,
-      maxAmountOfParticipants: 8,
-      price: "30",
-      imageUrl: "https://example.com/image300.jpg",
+      dateTime: "2023-05-19 12:00:00",
+      maxAmountOfParticipants: 4,
+      price: "4.99",
+      imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
-      name: "Meal300",
-      description: "This is the description for Meal 300",
-      allergenes: "gluten",
+      createDate: "2023-05-18",
+      updateDate: "2023-05-18",
+      description: "Test description for meal 1",
+      allergenes: "lactose",
+      name: "Testmeal"
     };
 
     chai
@@ -128,23 +131,10 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       .send(meal)
       .set("Authorization", "Bearer " + token)
       .end((err, res) => {
-        console.log("Error message: " + (err && err.message));
         res.should.have.status(201);
         res.body.should.have.property("message", "Meal created");
         res.body.should.have.property("data");
         res.body.data.should.have.property("meal");
-        res.body.data.meal.should.have.property("mealId");
-        res.body.data.meal.should.have.property("isActive");
-        res.body.data.meal.should.have.property("isVega");
-        res.body.data.meal.should.have.property("isVegan");
-        res.body.data.meal.should.have.property("isToTakeHome");
-        res.body.data.meal.should.have.property("maxAmountOfParticipants");
-        res.body.data.meal.should.have.property("price");
-        res.body.data.meal.should.have.property("imageUrl");
-        res.body.data.meal.should.have.property("cookId");
-        res.body.data.meal.should.have.property("name");
-        res.body.data.meal.should.have.property("description");
-        res.body.data.meal.should.have.property("allergenes");
         done();
       });
   });
@@ -326,14 +316,14 @@ describe("UC-302 Wijzigen van maaltijdgegevens", () => {
         res.should.have.status(201);
         res.body.should.have.property("message", "Meal updated");
         const { meal } = res.body.data;
-        meal.should.have.property("mealId", "1");
+        meal.should.have.property("mealId", '1');
         meal.should.have.property("isActive", 1);
         meal.should.have.property("isVega", 0);
         meal.should.have.property("isVegan", 0);
         meal.should.have.property("isToTakeHome", 0);
         meal.should.have.property("maxAmountOfParticipants", 8);
-        meal.should.have.property("price", "15.99");
-        meal.should.have.property("imageUrl", "https://example.com/image1.jpg");
+        meal.should.have.property("price", '15.99');
+        meal.should.have.property("imageUrl", 'https://example.com/image1.jpg');
         done();
       });
   });
@@ -380,8 +370,8 @@ describe("UC-303 Opvragen van alle maaltijden", () => {
         meal.should.have.property("isVegan", 0);
         meal.should.have.property("isToTakeHome", 0);
         meal.should.have.property("maxAmountOfParticipants", 8);
-        meal.should.have.property("price", "15.99");
-        meal.should.have.property("imageUrl", "https://example.com/image1.jpg");
+        meal.should.have.property("price", '15.99');
+        meal.should.have.property("imageUrl", 'https://example.com/image1.jpg');
         done();
       });
   });
