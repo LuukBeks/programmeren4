@@ -3,7 +3,7 @@ name: Testing and deployment
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   integrationtests:
@@ -21,7 +21,7 @@ jobs:
         ports:
           - '3306'
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@master
 
       - name: Start MySQL connection from host
         run: |
@@ -43,7 +43,7 @@ jobs:
         run: |
           npm test -- --DB_PASSWORD {{env.MYSQL_ROOT_PASSWORD}} --DB_USER root --DB_NAME ${{env.DB_DATABASE}}
 
-  #   Heroku-deploy:s
+  #   Heroku-deploy:
   #     needs: integrationtests
   #     runs-on: ubuntu-latest
   #     environment:
@@ -63,7 +63,7 @@ jobs:
       name: Railway # naam van mijn environment op GitHub
     steps:
       - name: Clone repository
-        uses: actions/checkout@main
+        uses: actions/checkout@master
 
       - name: 'Current token'
         run: |
