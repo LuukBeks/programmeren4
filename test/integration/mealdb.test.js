@@ -145,6 +145,7 @@ describe("UC-301 Toevoegen van maaltijd", () => {
         res.body.data.meal.should.have.property("description");
         res.body.data.meal.should.have.property("allergenes");
         done();
+        console.log("foutmelding: " + err);
       });
   });
 
