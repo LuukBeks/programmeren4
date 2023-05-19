@@ -113,7 +113,6 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVega: 0,
       isVegan: 0,
       isToTakeHome: 0,
-      dateTime: "2023-05-20 18:30:00",
       maxAmountOfParticipants: 8,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
