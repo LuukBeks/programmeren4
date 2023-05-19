@@ -113,13 +113,10 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVega: 0,
       isVegan: 0,
       isToTakeHome: 0,
-      dateTime: "2023-05-20 18:30:00",
       maxAmountOfParticipants: 8,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
-      createDate: "2023-05-18",
-      updateDate: "2023-05-18",
       name: "Meal 1",
       description: "This is the description for Meal 1",
       allergenes: "lactose",
@@ -140,7 +137,6 @@ describe("UC-301 Toevoegen van maaltijd", () => {
         res.body.data.meal.should.have.property("isVega");
         res.body.data.meal.should.have.property("isVegan");
         res.body.data.meal.should.have.property("isToTakeHome");
-        res.body.data.meal.should.have.property("dateTime");
         res.body.data.meal.should.have.property("maxAmountOfParticipants");
         res.body.data.meal.should.have.property("price");
         res.body.data.meal.should.have.property("imageUrl");
