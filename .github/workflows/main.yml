@@ -12,7 +12,7 @@ jobs:
       MYSQL_ROOT_PASSWORD: root # default root password to use must be 'root'
       DB_HOST: '127.0.0.1'
       DB_PORT: '3306'
-      DB_DATABASE: share_a_meal
+      DB_DATABASE: shareameal
       DB_USER: root
       DB_PASSWORD: root
     services:
@@ -32,7 +32,7 @@ jobs:
 
       - name: Import database script
         run: |
-          mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} < share-a-meal.sql
+          mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} < shareameal.sql
           mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} -e "SHOW TABLES;"
 
       - name: npm install
@@ -71,9 +71,6 @@ jobs:
 
       - name: Install Railway
         run: npm i -g @railway/cli
-
-      - name: Test environment
-        run: npm run test
 
       - name: Deploy server to Railway
         run: railway up
