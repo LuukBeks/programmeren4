@@ -113,18 +113,18 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVega: 0,
       isVegan: 0,
       isToTakeHome: 0,
-      dateTime: "2023-05-19 12:00:00",
-      maxAmountOfParticipants: 4,
-      price: "4.99",
+      dateTime: "2023-05-20 18:30:00",
+      maxAmountOfParticipants: 8,
+      price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
       createDate: "2023-05-18",
       updateDate: "2023-05-18",
-      description: "Test description for meal 1",
+      name: "Meal 1",
+      description: "This is the description for Meal 1",
       allergenes: "lactose",
-      name: "Testmeal"
     };
-
+  
     chai
       .request(server)
       .post("/api/meal")
@@ -133,8 +133,14 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       .end((err, res) => {
         res.should.have.status(201);
         res.body.should.have.property("message", "Meal created");
-        res.body.should.have.property("data");
-        res.body.data.should.have.property("meal");
+        const { meal } = res.body.data;
+        meal.should.have.property("isActive", 1);
+        meal.should.have.property("isVega", 0);
+        meal.should.have.property("isVegan", 0);
+        meal.should.have.property("isToTakeHome", 0);
+        meal.should.have.property("maxAmountOfParticipants", 8);
+        meal.should.have.property("price", '15.99');
+        meal.should.have.property("imageUrl", 'https://example.com/image1.jpg');
         done();
       });
   });
