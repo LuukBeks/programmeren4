@@ -43,7 +43,7 @@ jobs:
         run: |
           npm test -- --DB_PASSWORD {{env.MYSQL_ROOT_PASSWORD}} --DB_USER root --DB_NAME ${{env.DB_DATABASE}}
 
-  #   Heroku-deploy:
+  #   Heroku-deploy:s
   #     needs: integrationtests
   #     runs-on: ubuntu-latest
   #     environment:
