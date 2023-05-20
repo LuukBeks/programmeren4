@@ -260,6 +260,7 @@ describe("UC-201 - Registreren als nieuwe user", () => {
         body.should.have.property("data");
         const { data } = body;
         data.should.be.an("object");
+        data.should.have.property("id");
         data.should.have.property("firstName");
         data.should.have.property("lastName");
         data.should.have.property("emailAdress");
@@ -339,6 +340,8 @@ describe("uc-202 - krijg alle users", () => {
         const { data } = body;
         data.should.be.an("array").and.have.lengthOf.at.least(2);
         data.forEach((user) => {
+          user.should.be.an("object");
+          user.should.have.property("id");
           user.should.have.property("firstName");
           user.should.have.property("lastName");
           user.should.have.property("emailAdress");
@@ -388,6 +391,8 @@ describe("uc-202 - krijg alle users", () => {
         data.should.be.an("array").and.have.lengthOf.at.least(1);
         assert(data[0].isActive === 0);
         data.forEach((user) => {
+          user.should.be.an("object");
+          user.should.have.property("id");
           user.should.have.property("firstName");
           user.should.have.property("lastName");
           user.should.have.property("emailAdress");
@@ -420,6 +425,8 @@ describe("uc-202 - krijg alle users", () => {
         data.should.be.an("array").and.have.lengthOf.at.least(1);
         assert(data[0].isActive === 1);
         data.forEach((user) => {
+          user.should.be.an("object");
+          user.should.have.property("id");
           user.should.have.property("firstName");
           user.should.have.property("lastName");
           user.should.have.property("emailAdress");
@@ -453,6 +460,8 @@ describe("uc-202 - krijg alle users", () => {
         assert(data[0].isActive === 1);
         assert(data[0].roles === "admin");
         data.forEach((user) => {
+          user.should.be.an("object");
+          user.should.have.property("id");
           user.should.have.property("firstName");
           user.should.have.property("lastName");
           user.should.have.property("emailAdress");
@@ -831,6 +840,8 @@ describe("UC-205 Wijzigen van gebruikersprofiel", () => {
           .to.be.equal("User profile updated");
         body.should.have.property("data");
         const { data } = body;
+        data.should.be.an("object");
+        data.should.have.property("id").to.be.equal(6);
         data.should.have.property("firstName").to.be.equal("John");
         data.should.have.property("lastName").to.be.equal("Doe");
         data.should.have.property("isActive").to.be.equal(1);
