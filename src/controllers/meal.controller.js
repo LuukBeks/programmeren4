@@ -206,7 +206,7 @@ const mealController = {
           if (mealResults && mealResults.length === 0) {
             logger.info("Meal not found with id: " + mealId);
             res.status(404).json({
-              statusCode: 404,
+              status: 404,
               message: "Meal not found",
               data: [],
             });
@@ -240,7 +240,7 @@ const mealController = {
                   logger.trace(results);
                   logger.info("Found", results.length, "results");
                   res.status(201).json({
-                    statusCode: 201,
+                    status: 201,
                     message: "Meal updated",
                     data: {
                       meal: {
@@ -261,7 +261,7 @@ const mealController = {
                 } else {
                   logger.info("Not authorized");
                   res.status(403).json({
-                    statusCode: 403,
+                    status: 403,
                     message: "Not authorized",
                     data: results,
                   });
@@ -303,7 +303,7 @@ const mealController = {
           if (results) {
             logger.info("Found", results.length, "results");
             res.status(200).json({
-              statusCode: 200,
+              status: 200,
               message: "Meals retrieved",
               data: {
                 meals: results.map((meal) => ({
@@ -354,14 +354,14 @@ const mealController = {
           if (results && results.length > 0) {
             logger.info("Found", results.length, "results");
             res.status(200).json({
-              statusCode: 200,
+              status: 200,
               message: "Meal retrieved",
               data: results,
             });
           } else {
             logger.info("Meal not found with id:", mealId);
             res.status(404).json({
-              statusCode: 404,
+              status: 404,
               message: "Meal not found",
               data: [],
             });
@@ -402,14 +402,14 @@ const mealController = {
           if (mealResults && mealResults.length === 0) {
             logger.info("Meal not found with id:", mealId);
             res.status(404).json({
-              statusCode: 404,
+              status: 404,
               message: "Meal not found",
               data: {},
             });
           } else if (mealResults[0].cookId !== userId) {
             logger.info("You are not the owner of this data!");
             res.status(403).json({
-              statusCode: 403,
+              status: 403,
               message: "You are not the owner of this data!",
               data: {},
             });

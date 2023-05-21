@@ -12,7 +12,7 @@ const userController = {
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         next({
-          code: 500,
+          status: 500,
           message: err.code.toString(),
           data: {},
         });
@@ -72,7 +72,7 @@ const userController = {
         } catch (err) {
           logger.warn(err.message.toString());
           res.status(400).json({
-            statusCode: 400,
+            status: 400,
             message: err.message.toString(),
             data: {},
           });
@@ -87,7 +87,7 @@ const userController = {
             if (err) {
               logger.error(err.message);
               next({
-                code: 500,
+                status: 500,
                 message: err.message.toString(),
                 data: {},
               });
@@ -95,7 +95,7 @@ const userController = {
               if (results.length > 0) {
                 // Email already exists
                 res.status(403).json({
-                  statusCode: 403,
+                  status: 403,
                   message: "User already exists",
                   data: {},
                 });
@@ -118,14 +118,14 @@ const userController = {
                     if (err) {
                       logger.error(err.message);
                       next({
-                        code: 500,
+                        status: 500,
                         message: err.message.toString(),
                         data: {},
                       });
                     } else {
                       logger.info("Found", results.length, "results");
                       res.status(201).json({
-                        statusCode: 201,
+                        status: 201,
                         message: "User successfully created",
                         data: {
                           id: results.insertId,
@@ -188,7 +188,7 @@ const userController = {
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         next({
-          code: 500,
+          status: 500,
           message: err.code,
         });
       } else {
@@ -196,7 +196,7 @@ const userController = {
           if (err) {
             logger.error(err.message);
             next({
-              code: 409,
+              status: 409,
               message: err.message,
             });
           } else {
@@ -209,7 +209,7 @@ const userController = {
               ).length === 0
             ) {
               res.status(200).json({
-                statusCode: 200,
+                status: 200,
                 message: "User getAll endpoint",
                 data: results,
               });
@@ -219,12 +219,12 @@ const userController = {
               )
             ) {
               next({
-                code: 400,
+                status: 400,
                 message: "Invalid filter(s) used",
               });
             } else {
               res.status(200).json({
-                statusCode: 200,
+                status: 200,
                 message: "User getAll endpoint",
                 data: [],
               });
@@ -247,7 +247,7 @@ const userController = {
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         next({
-          code: 500,
+          status: 500,
           message: err.code,
         });
       }
@@ -256,14 +256,14 @@ const userController = {
           if (err) {
             logger.error(err.message);
             next({
-              code: 409,
+              status: 409,
               message: err.message,
             });
           }
           if (results) {
             logger.trace("Found", results.length, "results");
             res.status(200).json({
-              code: 200,
+              status: 200,
               message: "Get User profile",
               data: results[0],
             });
@@ -300,7 +300,7 @@ const userController = {
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         next({
-          code: 500,
+          status: 500,
           message: err.code.toString(),
           data: {},
         });
@@ -310,14 +310,14 @@ const userController = {
           if (err) {
             logger.error(err.message);
             next({
-              code: 409,
+              status: 409,
               message: err.message.toString(),
               data: {},
             });
           } else if (results.length === 0) {
             logger.info("User not found");
             res.status(404).json({
-              statusCode: 404,
+              status: 404,
               message: "User not found!",
               data: {},
             });
@@ -327,7 +327,7 @@ const userController = {
             // Check if the logged-in user is the owner and include the password in the response
             if (id === loggedInUserId) {
               res.status(200).json({
-                statusCode: 200,
+                status: 200,
                 message: "User profile",
                 data: results,
               });
@@ -339,7 +339,7 @@ const userController = {
               });
 
               res.status(200).json({
-                statusCode: 200,
+                status: 200,
                 message: "User profile",
                 data: userProfile,
               });
@@ -365,7 +365,7 @@ const userController = {
       if (err) {
         logger.error(err.code, err.syscall, err.address, err.port);
         return next({
-          code: 500,
+          status: 500,
           message: err.code.toString(),
           data: {},
         });
@@ -409,7 +409,7 @@ const userController = {
       } catch (err) {
         logger.warn(err.message.toString());
         return res.status(400).json({
-          statusCode: 400,
+          status: 400,
           message: err.message.toString(),
           data: {},
         });
@@ -419,7 +419,7 @@ const userController = {
         if (err) {
           logger.error(err.message);
           return next({
-            code: 500,
+            status: 500,
             message: err.message.toString(),
             data: {},
           });
@@ -427,7 +427,7 @@ const userController = {
 
         if (userCheckResults[0].count === 0) {
           return res.status(404).json({
-            statusCode: 404,
+            status: 404,
             message: "User not found",
             data: {},
           });
@@ -435,7 +435,7 @@ const userController = {
 
         if (userId !== loggedInUserId) {
           return res.status(403).json({
-            statusCode: 403,
+            status: 403,
             message: "Forbidden: You are not the owner of the data!",
             data: {},
           });
@@ -453,7 +453,7 @@ const userController = {
               if (err) {
                 logger.error(err.message);
                 return next({
-                  code: 500,
+                  status: 500,
                   message: err.message.toString(),
                   data: {},
                 });
@@ -461,7 +461,7 @@ const userController = {
 
               if (emailCheckResults[0].count > 0) {
                 return res.status(409).json({
-                  statusCode: 409,
+                  status: 409,
                   message: "Email already exists",
                   data: {},
                 });
@@ -492,7 +492,7 @@ const userController = {
             if (err) {
               logger.error(err.message);
               return next({
-                code: 409,
+                status: 409,
                 message: err.message.toString(),
                 data: {},
               });
@@ -500,7 +500,7 @@ const userController = {
 
             logger.info("Found", results.affectedRows, "rows affected");
             res.status(200).json({
-              statusCode: 200,
+              status: 200,
               message: "User profile updated",
               data: {
                 id: userId,
@@ -535,7 +535,7 @@ const userController = {
     // Test case: Gebruiker is niet ingelogd
     if (!loggedInUserId) {
       res.status(401).json({
-        statusCode: 401,
+        status: 401,
         message: "Unauthorized: User is not logged in",
         data: {},
       });
@@ -553,7 +553,7 @@ const userController = {
           function (err, countResults) {
             if (err) {
               res.status(500).json({
-                statusCode: 500,
+                status: 500,
                 message: err.sqlMessage,
                 data: {},
               });
@@ -562,7 +562,7 @@ const userController = {
 
             if (countResults[0].count === 0) {
               res.status(404).json({
-                statusCode: 404,
+                status: 404,
                 message: "User not found",
                 data: {},
               });
@@ -572,7 +572,7 @@ const userController = {
             // Test case: De gebruiker is niet de eigenaar van de data
             if (userId !== loggedInUserId) {
               res.status(403).json({
-                statusCode: 403,
+                status: 403,
                 message:
                   "Forbidden: You are not authorized to delete this user",
                 data: {},
@@ -587,7 +587,7 @@ const userController = {
               function (err, deleteResults) {
                 if (err) {
                   res.status(500).json({
-                    statusCode: 500,
+                    status: 500,
                     message: err.sqlMessage,
                     data: {},
                   });
@@ -596,7 +596,7 @@ const userController = {
 
                 // Test case: Gebruiker succesvol verwijderd
                 res.status(200).json({
-                  statusCode: 200,
+                  status: 200,
                   message: "User deleted with id " + userId,
                   data: deleteResults,
                 });

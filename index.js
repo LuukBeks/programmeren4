@@ -44,7 +44,7 @@ app.use('*', (req, res) => {
 app.use((err, req, res, next) => {
   logger.error(err.code, err.message);
   res.status(err.code).json({
-    statusCode: err.code,
+    status: err.code,
     message: err.message,
     data: {}
   });
