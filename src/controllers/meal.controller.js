@@ -91,7 +91,12 @@ const mealController = {
                 message: err.message,
               });
               console.log("ERRORCODE: " + err);
-              logger.error("ERROR: " +err.status, err.syscall, err.address, err.port);
+              logger.error(
+                "ERROR: " + err.status,
+                err.syscall,
+                err.address,
+                err.port
+              );
             }
             if (results) {
               const mealId = results.insertId;
@@ -249,13 +254,14 @@ const mealController = {
                         isVega: req.body.isVega,
                         isVegan: req.body.isVegan,
                         isToTakeHome: req.body.isToTakeHome,
-                        maxAmountOfParticipants: req.body.maxAmountOfParticipants,
+                        maxAmountOfParticipants:
+                          req.body.maxAmountOfParticipants,
                         price: req.body.price,
                         imageUrl: req.body.imageUrl,
                         name: req.body.name,
                         description: req.body.description,
                         allergenes: req.body.allergenes,
-                      }
+                      },
                     },
                   });
                 } else {
@@ -294,7 +300,7 @@ const mealController = {
       if (conn) {
         conn.query(sqlStatement, function (err, results, fields) {
           if (err) {
-            logger.err(err.message);
+            logger.error(err.message);
             next({
               status: 409,
               message: err.message,
@@ -376,10 +382,10 @@ const mealController = {
   deleteMeal: (req, res, next) => {
     const mealId = req.params.mealId;
     const userId = req.userId;
-  
+
     logger.trace("Deleting meal id", mealId, "by user", userId);
     let sqlStatement = "DELETE FROM `meal` WHERE id=? AND cookId=? ";
-  
+
     pool.getConnection(function (err, conn) {
       if (err) {
         logger.error(err.status, err.syscall, err.address, err.port);
@@ -419,7 +425,7 @@ const mealController = {
               [mealId, userId],
               function (err, results, fields) {
                 if (err) {
-                  logger.err(err.message);
+                  logger.error(err.message);
                   next({
                     status: 409,
                     message: err.message,
@@ -444,6 +450,221 @@ const mealController = {
           }
         });
         pool.releaseConnection(conn);
+      }
+    });
+  },
+
+  // uc 401 aanmelden voor maaltijd
+  signUpForMeal: (req, res, next) => {
+    const mealId = req.params.mealId;
+    const userId = req.userId;
+    logger.trace("Signing up for meal id", mealId, "by user", userId);
+    let sqlStatement =
+      "INSERT INTO `meal_participants_user` (mealId, userId) VALUES (?, ?)";
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error(err.status, err.syscall, err.address, err.port);
+        next({
+          status: 500,
+          message: err.status,
+        });
+      }
+      if (conn) {
+        // Check if the meal exists
+        const checkMealSql = "SELECT * FROM `meal` WHERE `id` = ?";
+        conn.query(checkMealSql, [mealId], function (err, mealResults) {
+          if (err) {
+            logger.error(err.message);
+            next({
+              status: 409,
+              message: err.message,
+            });
+          }
+          if (mealResults && mealResults.length === 0) {
+            logger.info("Meal not found with id:", mealId);
+            res.status(404).json({
+              status: 404,
+              message: "Meal not found",
+              data: {},
+            });
+          } else {
+            // Check if the user already signed up for the meal
+            const checkSignupSql =
+              "SELECT * FROM `meal_participants_user` WHERE `mealId` = ? AND `userId` = ?";
+            conn.query(
+              checkSignupSql,
+              [mealId, userId],
+              function (err, signupResults) {
+                if (err) {
+                  logger.error(err.message);
+                  next({
+                    status: 409,
+                    message: err.message,
+                  });
+                }
+                if (signupResults && signupResults.length > 0) {
+                  logger.info("User already signed up for this meal");
+                  res.status(409).json({
+                    status: 409,
+                    message: "You have already signed up for this meal",
+                    data: {},
+                  });
+                } else {
+                  // Count participants for the meal
+                  const countParticipantsSql =
+                    "SELECT COUNT(*) AS participantCount FROM `meal_participants_user` WHERE `mealId` = ?";
+                  conn.query(
+                    countParticipantsSql,
+                    [mealId],
+                    function (err, countResults) {
+                      if (err) {
+                        logger.error(err.message);
+                        next({
+                          status: 409,
+                          message: err.message,
+                        });
+                      }
+                      const participantCount = countResults[0].participantCount;
+                      const maxParticipants =
+                        mealResults[0].maxAmountOfParticipants;
+
+                      if (participantCount >= maxParticipants) {
+                        logger.info("Meal is already full with participants");
+                        res.status(200).json({
+                          status: 200,
+                          message: "Maximum aantal aanmeldingen bereikt",
+                          data: {},
+                        });
+                      } else {
+                        conn.query(
+                          sqlStatement,
+                          [mealId, userId],
+                          function (err, results, fields) {
+                            if (err) {
+                              logger.error(err.message);
+                              next({
+                                status: 409,
+                                message: err.message,
+                              });
+                            }
+                            if (results && results.affectedRows === 1) {
+                              logger.trace("results:", results);
+                              res.status(200).json({
+                                status: 200,
+                                message: `User met ID ${userId} is aangemeld voor maaltijd met ID ${mealId}`,
+                                data: {},
+                              });
+                            } else {
+                              next({
+                                status: 401,
+                                message: "Not authorized",
+                                data: {},
+                              });
+                            }
+                          }
+                        );
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
+        });
+        conn.release();
+      }
+    });
+  },
+
+  // uc 402 afmelden voor maaltijd
+  signOffForMeal: (req, res, next) => {
+    const mealId = req.params.mealId;
+    const userId = req.userId;
+    logger.trace("Signing off for meal id", mealId, "by user", userId);
+    let sqlStatement =
+      "DELETE FROM `meal_participants_user` WHERE mealId=? AND userId=? ";
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error(err.status, err.syscall, err.address, err.port);
+        next({
+          status: 500,
+          message: err.status,
+        });
+      }
+      if (conn) {
+        // Check if the meal exists
+        const checkMealSql = "SELECT * FROM `meal` WHERE `id` = ?";
+        conn.query(checkMealSql, [mealId], function (err, mealResults) {
+          if (err) {
+            logger.error(err.message);
+            next({
+              status: 409,
+              message: err.message,
+            });
+          }
+          if (mealResults && mealResults.length === 0) {
+            logger.info("Meal not found with id:", mealId);
+            res.status(404).json({
+              status: 404,
+              message: "Meal not found",
+              data: {},
+            });
+          } else {
+            // Check if the user already signed up for the meal
+            const checkSignupSql =
+              "SELECT * FROM `meal_participants_user` WHERE `mealId` = ? AND `userId` = ?";
+            conn.query(
+              checkSignupSql,
+              [mealId, userId],
+              function (err, signupResults) {
+                if (err) {
+                  logger.error(err.message);
+                  next({
+                    status: 409,
+                    message: err.message,
+                  });
+                }
+                if (signupResults && signupResults.length === 0) {
+                  logger.info("Aanmelding niet gevonden");
+                  res.status(404).json({
+                    status: 404,
+                    message: "Aanmelding niet gevonden",
+                    data: {},
+                  });
+                } else {
+                  conn.query(
+                    sqlStatement,
+                    [mealId, userId],
+                    function (err, results, fields) {
+                      if (err) {
+                        logger.error(err.message);
+                        next({
+                          status: 409,
+                          message: err.message,
+                        });
+                      }
+                      if (results && results.affectedRows === 1) {
+                        logger.trace("results:", results);
+                        res.status(200).json({
+                          status: 200,
+                          message: `User met ID ${userId} is afgemeld voor maaltijd met ID ${mealId}`,
+                          data: {},
+                        });
+                      } else {
+                        next({
+                          status: 401,
+                          message: "Not authorized",
+                          data: {},
+                        });
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
+        });
+        conn.release();
       }
     });
   },

@@ -23,8 +23,10 @@ const CLEAR_DB =
 const INSERT_USER =
   "INSERT INTO user (id, firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (1, 'john', 'doe', 1, 'johan.doe@example.com', 'Welkom123', '06-12345678', 'admin', '28 straat', 'Eindhoven'), (2, 'jane', 'smith', 0, 'jane.smith@example.com', 'Password123', '06-12345678', 'guest', '42 avenue', 'New York');";
 const INSERT_MEAL =
-  "INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, createDate, updateDate, name, description, allergenes) VALUES (1, 1, 1, 0, 0, '2023-05-20 18:30:00', 8, 15.99, 'https://example.com/image1.jpg', 1, '2023-05-18', '2023-05-18', 'Meal 1', 'This is the description for Meal 1', 'lactose'), (2, 1, 1, 0, 0, '2023-05-20 18:30:00', 8, 12.99, 'https://example.com/image2.jpg', 2, '2023-05-19', '2023-05-19', 'Meal 2', 'This is the description for Meal 2', 'gluten,noten');";
-const INSERT = INSERT_USER + INSERT_MEAL;
+  "INSERT INTO meal (id, isActive, isVega, isVegan, isToTakeHome, dateTime, maxAmountOfParticipants, price, imageUrl, cookId, createDate, updateDate, name, description, allergenes) VALUES (1, 1, 1, 0, 0, '2023-05-20 18:30:00', 1, 15.99, 'https://example.com/image1.jpg', 1, '2023-05-18', '2023-05-18', 'Meal 1', 'This is the description for Meal 1', 'lactose'), (2, 1, 1, 0, 0, '2023-05-20 18:30:00', 1, 12.99, 'https://example.com/image2.jpg', 2, '2023-05-19', '2023-05-19', 'Meal 2', 'This is the description for Meal 2', 'gluten,noten');";
+const INSERT_PARTICIPANTS =
+  "INSERT INTO meal_participants_user (mealId, userId) VALUES (2, 2)"
+const INSERT = INSERT_USER + INSERT_MEAL + INSERT_PARTICIPANTS;
 
 describe("UC-301 Toevoegen van maaltijd", () => {
   before((done) => {
@@ -48,7 +50,7 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVegan: 0,
       isToTakeHome: 0,
       dateTime: "2023-05-20 18:30:00",
-      maxAmountOfParticipants: 8,
+      maxAmountOfParticipants: 1,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
@@ -81,7 +83,7 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVegan: 0,
       isToTakeHome: 0,
       dateTime: "2023-05-20 18:30:00",
-      maxAmountOfParticipants: 8,
+      maxAmountOfParticipants: 1,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
@@ -113,7 +115,7 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       isVega: 0,
       isVegan: 0,
       isToTakeHome: 0,
-      maxAmountOfParticipants: 8,
+      maxAmountOfParticipants: 1,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
@@ -123,7 +125,7 @@ describe("UC-301 Toevoegen van maaltijd", () => {
       description: "This is the description for Meal 1",
       allergenes: "lactose",
     };
-  
+
     chai
       .request(server)
       .post("/api/meal")
@@ -137,9 +139,9 @@ describe("UC-301 Toevoegen van maaltijd", () => {
         meal.should.have.property("isVega", 0);
         meal.should.have.property("isVegan", 0);
         meal.should.have.property("isToTakeHome", 0);
-        meal.should.have.property("maxAmountOfParticipants", 8);
-        meal.should.have.property("price", '15.99');
-        meal.should.have.property("imageUrl", 'https://example.com/image1.jpg');
+        meal.should.have.property("maxAmountOfParticipants", 1);
+        meal.should.have.property("price", "15.99");
+        meal.should.have.property("imageUrl", "https://example.com/image1.jpg");
         done();
       });
   });
@@ -206,7 +208,7 @@ describe("UC-302 Wijzigen van maaltijdgegevens", () => {
       isVegan: 0,
       isToTakeHome: 0,
       dateTime: "2023-05-20 18:30:00",
-      maxAmountOfParticipants: 8,
+      maxAmountOfParticipants: 1,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
@@ -239,7 +241,7 @@ describe("UC-302 Wijzigen van maaltijdgegevens", () => {
       isVegan: 0,
       isToTakeHome: 0,
       dateTime: "2023-05-20 18:30:00",
-      maxAmountOfParticipants: 8,
+      maxAmountOfParticipants: 1,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
@@ -270,7 +272,7 @@ describe("UC-302 Wijzigen van maaltijdgegevens", () => {
       isVegan: 0,
       isToTakeHome: 0,
       dateTime: "2023-05-20 18:30:00",
-      maxAmountOfParticipants: 8,
+      maxAmountOfParticipants: 1,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
@@ -301,7 +303,7 @@ describe("UC-302 Wijzigen van maaltijdgegevens", () => {
       isVegan: 0,
       isToTakeHome: 0,
       dateTime: "2023-05-20 18:30:00",
-      maxAmountOfParticipants: 8,
+      maxAmountOfParticipants: 1,
       price: "15.99",
       imageUrl: "https://example.com/image1.jpg",
       cookId: 1,
@@ -321,14 +323,14 @@ describe("UC-302 Wijzigen van maaltijdgegevens", () => {
         res.should.have.status(201);
         res.body.should.have.property("message", "Meal updated");
         const { meal } = res.body.data;
-        meal.should.have.property("mealId", '1');
+        meal.should.have.property("mealId", "1");
         meal.should.have.property("isActive", 1);
         meal.should.have.property("isVega", 0);
         meal.should.have.property("isVegan", 0);
         meal.should.have.property("isToTakeHome", 0);
-        meal.should.have.property("maxAmountOfParticipants", 8);
-        meal.should.have.property("price", '15.99');
-        meal.should.have.property("imageUrl", 'https://example.com/image1.jpg');
+        meal.should.have.property("maxAmountOfParticipants", 1);
+        meal.should.have.property("price", "15.99");
+        meal.should.have.property("imageUrl", "https://example.com/image1.jpg");
         done();
       });
   });
@@ -374,9 +376,9 @@ describe("UC-303 Opvragen van alle maaltijden", () => {
         meal.should.have.property("isVega", 1);
         meal.should.have.property("isVegan", 0);
         meal.should.have.property("isToTakeHome", 0);
-        meal.should.have.property("maxAmountOfParticipants", 8);
-        meal.should.have.property("price", '15.99');
-        meal.should.have.property("imageUrl", 'https://example.com/image1.jpg');
+        meal.should.have.property("maxAmountOfParticipants", 1);
+        meal.should.have.property("price", "15.99");
+        meal.should.have.property("imageUrl", "https://example.com/image1.jpg");
         done();
       });
   });
@@ -429,7 +431,7 @@ describe("UC-304 Opvragen van een maaltijd bij id", () => {
         res.body.data[0].should.have.property("isVega", 1);
         res.body.data[0].should.have.property("isVegan", 0);
         res.body.data[0].should.have.property("isToTakeHome", 0);
-        res.body.data[0].should.have.property("maxAmountOfParticipants", 8);
+        res.body.data[0].should.have.property("maxAmountOfParticipants", 1);
         res.body.data[0].should.have.property("price", "15.99");
         res.body.data[0].should.have.property(
           "imageUrl",
@@ -530,5 +532,156 @@ describe("UC-305 verwijderen van maaltijd", () => {
       assert(err === null);
       done();
     });
+  });
+});
+
+describe("UC-401 Aanmelden voor maaltijd", () => {
+  before((done) => {
+    // Clear the database and insert a user for testing
+    pool.query(CLEAR_DB, (err, result) => {
+      console.log("clear_db: " + err);
+      assert(err === null);
+      pool.query(INSERT, (err, result) => {
+        console.log("insert_meal: " + err);
+        assert(err === null);
+        done();
+      });
+    });
+  });
+
+  it("TC-401-1 niet ingelogd", (done) => {
+    const token = "";
+    chai
+      .request(server)
+      .post("/api/meal/1/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property("message", "Invalid token!");
+        res.should.have.status(401);
+        done();
+      });
+  });
+
+  it("TC-401-2 maaltijd bestaat niet", (done) => {
+    const token = jwt.sign({ userId: 1 }, jwtSecretKey);
+    chai
+      .request(server)
+      .post("/api/meal/999/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property("message", "Meal not found");
+        res.should.have.status(404);
+        done();
+      });
+  });
+
+  it("TC-401-3 succesvol aangemeld", (done) => {
+    const token = jwt.sign({ userId: 2 }, jwtSecretKey);
+    chai
+      .request(server)
+      .post("/api/meal/1/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property(
+          "message",
+          `User met ID 2 is aangemeld voor maaltijd met ID 1`
+        );
+        res.should.have.status(200);
+        done();
+      });
+  });
+
+  it("TC-401-4 maximumaantal aanmeldingen bereikt", (done) => {
+    const token = jwt.sign({ userId: 1 }, jwtSecretKey);
+    chai
+      .request(server)
+      .post("/api/meal/1/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property(
+          "message",
+          `Maximum aantal aanmeldingen bereikt`
+        );
+        res.should.have.status(200);
+        done();
+      });
+  });
+
+  after((done) => {
+    // Clear the database after testing
+    pool.query(CLEAR_DB, (err, result) => {
+      assert(err === null);
+      done();
+    });
+  });
+});
+
+describe("UC-402 afmelden voor maaltijd", () => {
+  before((done) => {
+    // Clear the database and insert a user for testing
+    pool.query(CLEAR_DB, (err, result) => {
+      console.log("clear_db: " + err);
+      assert(err === null);
+      pool.query(INSERT, (err, result) => {
+        console.log("insert_meal: " + err);
+        assert(err === null);
+        done();
+      });
+    });
+  });
+
+  it("TC-402-1 niet ingelogd", (done) => {
+    const token = "";
+    chai
+      .request(server)
+      .delete("/api/meal/1/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property("message", "Invalid token!");
+        res.should.have.status(401);
+        done();
+      });
+  });
+
+  it("TC-402-2 maaltijd bestaat niet", (done) => {
+    const token = jwt.sign({ userId: 1 }, jwtSecretKey);
+    chai
+      .request(server)
+      .delete("/api/meal/999/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property("message", "Meal not found");
+        res.should.have.status(404);
+        done();
+      });
+  });
+
+  it("TC-402-3 aanmelding bestaat niet", (done) => {
+    const token = jwt.sign({ userId: 2 }, jwtSecretKey);
+    chai
+      .request(server)
+      .delete("/api/meal/1/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property("message", `Aanmelding niet gevonden`);
+        res.should.have.status(404);
+        done();
+      });
+  });
+
+  it("TC-402-4 succesvol afgemeld", (done) => {
+    const token = jwt.sign({ userId: 2 }, jwtSecretKey);
+    chai
+      .request(server)
+      .delete("/api/meal/2/participate")
+      .set("Authorization", "Bearer " + token)
+      .end((err, res) => {
+        res.body.should.have.property(
+          "message",
+          `User met ID 2 is afgemeld voor maaltijd met ID 2`
+        );
+        res.should.have.status(200);
+        done();
+      });
   });
 });

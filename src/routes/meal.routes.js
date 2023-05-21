@@ -13,4 +13,12 @@ router.get("/:mealId", mealController.getMealById);
 
 router.delete("/:mealId", authController.validateToken, mealController.deleteMeal);
 
+router.post("/:mealId/participate", authController.validateToken, mealController.signUpForMeal);
+
+router.delete("/:mealId/participate", authController.validateToken, mealController.signOffForMeal);
+
+// router.get("/:mealId/participate", authController.validateToken, mealController.getMealParticipants);
+
+// router.get("/:mealId/participants/:participantId", authController.validateToken, mealController.getMealParticipantById);
+
 module.exports = router;
