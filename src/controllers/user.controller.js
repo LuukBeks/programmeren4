@@ -10,10 +10,10 @@ const userController = {
       "INSERT INTO user (firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     pool.getConnection(function (err, conn) {
       if (err) {
-        logger.error(err.code, err.syscall, err.address, err.port);
+        logger.error(err.status, err.syscall, err.address, err.port);
         next({
           status: 500,
-          message: err.code.toString(),
+          message: err.status.toString(),
           data: {},
         });
       } else {
@@ -186,10 +186,10 @@ const userController = {
     logger.info("sqlStatement", sqlStatement);
     pool.getConnection(function (err, conn) {
       if (err) {
-        logger.error(err.code, err.syscall, err.address, err.port);
+        logger.error(err.status, err.syscall, err.address, err.port);
         next({
           status: 500,
-          message: err.code,
+          message: err.status,
         });
       } else {
         conn.query(sqlStatement, function (err, results, fields) {
@@ -245,10 +245,10 @@ const userController = {
     pool.getConnection(function (err, conn) {
       // Do something with the connection
       if (err) {
-        logger.error(err.code, err.syscall, err.address, err.port);
+        logger.error(err.status, err.syscall, err.address, err.port);
         next({
           status: 500,
-          message: err.code,
+          message: err.status,
         });
       }
       if (conn) {
@@ -298,10 +298,10 @@ const userController = {
 
     pool.getConnection(function (err, conn) {
       if (err) {
-        logger.error(err.code, err.syscall, err.address, err.port);
+        logger.error(err.status, err.syscall, err.address, err.port);
         next({
           status: 500,
-          message: err.code.toString(),
+          message: err.status.toString(),
           data: {},
         });
       }
@@ -363,10 +363,10 @@ const userController = {
 
     pool.getConnection((err, conn) => {
       if (err) {
-        logger.error(err.code, err.syscall, err.address, err.port);
+        logger.error(err.status, err.syscall, err.address, err.port);
         return next({
           status: 500,
-          message: err.code.toString(),
+          message: err.status.toString(),
           data: {},
         });
       }

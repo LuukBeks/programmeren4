@@ -42,9 +42,9 @@ app.use('*', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  logger.error(err.code, err.message);
-  res.status(err.code).json({
-    status: err.code,
+  logger.error(err.status, err.message);
+  res.status(err.status).json({
+    status: err.status,
     message: err.message,
     data: {}
   });

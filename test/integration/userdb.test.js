@@ -64,7 +64,6 @@ describe("UC 101 - inloggen", () => {
         const { body } = res;
         res.should.have.status(400);
         body.should.be.an("object");
-        body.should.have.property("status").to.be.equal(400);
         body.should.have.property("message").to.be.equal("Not authorized");
         body.should.have.property("data");
         const { data } = body;
@@ -83,7 +82,7 @@ describe("UC 101 - inloggen", () => {
         const { body } = res;
         res.should.have.status(404);
         body.should.be.an("object");
-        body.should.have.property("status").to.be.equal(404);
+        body.should.have.status(404);
         body.should.have.property("message").to.be.equal("User not found");
         body.should.have.property("data");
         const { data } = body;
@@ -104,7 +103,6 @@ describe("UC 101 - inloggen", () => {
         assert(err === null);
         res.should.have.status(200);
         res.body.should.be.an("object");
-        res.body.should.have.property("status").to.be.equal(200);
         res.body.should.have.property("message").to.be.equal("Login endpoint");
         res.body.should.have.property("data");
         const { data } = res.body;
@@ -160,7 +158,7 @@ describe("UC-201 - Registreren als nieuwe user", () => {
         const { body } = res;
         res.should.have.status(400);
         body.should.be.an("object");
-        body.should.have.property("status").to.be.equal(400);
+        body.should.have.status(400);
         body.should.have
           .property("message")
           .to.be.equal("isActive must be an integer, 1 or 0"); // because isActive is missing. so if you remove firstName the error will be different
@@ -191,7 +189,7 @@ describe("UC-201 - Registreren als nieuwe user", () => {
         const { body } = res;
         res.should.have.status(400);
         body.should.be.an("object");
-        body.should.have.property("status").to.be.equal(400);
+        body.should.have.status(400);
         body.should.have
           .property("message")
           .to.be.equal("emailAdress is invalid");
@@ -222,7 +220,7 @@ describe("UC-201 - Registreren als nieuwe user", () => {
         const { body } = res;
         body.should.be.an("object");
         res.should.have.status(400);
-        body.should.have.property("status").to.be.equal(400);
+        body.should.have.status(400);
         body.should.have
           .property("message")
           .to.be.equal("password must be a string");
@@ -253,7 +251,6 @@ describe("UC-201 - Registreren als nieuwe user", () => {
         const { body } = res;
         body.should.be.an("object");
         res.should.have.status(201);
-        body.should.have.property("status").to.be.equal(201);
         body.should.have
           .property("message")
           .to.be.equal("User successfully created");
@@ -295,7 +292,7 @@ describe("UC-201 - Registreren als nieuwe user", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(403);
-        body.should.have.property("status").to.be.equal(403);
+        body.should.have.status(403);
         body.should.have.property("message").to.be.equal("User already exists");
         body.should.have.property("data");
         const { data } = body;
@@ -332,7 +329,7 @@ describe("uc-202 - krijg alle users", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(200);
-        body.should.have.property("status").to.be.equal(200);
+        body.should.have.status(200);
         body.should.have
           .property("message")
           .to.be.equal("User getAll endpoint");
@@ -365,7 +362,7 @@ describe("uc-202 - krijg alle users", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(400);
-        body.should.have.property("status").to.be.equal(400);
+        body.should.have.status(400);
         body.should.have
           .property("message")
           .to.be.equal("Invalid filter(s) used");
@@ -382,7 +379,6 @@ describe("uc-202 - krijg alle users", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(200);
-        body.should.have.property("status").to.be.equal(200);
         body.should.have
           .property("message")
           .to.be.equal("User getAll endpoint");
@@ -416,7 +412,7 @@ describe("uc-202 - krijg alle users", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(200);
-        body.should.have.property("status").to.be.equal(200);
+        body.should.have.status(200);
         body.should.have
           .property("message")
           .to.be.equal("User getAll endpoint");
@@ -450,7 +446,7 @@ describe("uc-202 - krijg alle users", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(200);
-        body.should.have.property("status").to.be.equal(200);
+        body.should.have.status(200);
         body.should.have
           .property("message")
           .to.be.equal("User getAll endpoint");
@@ -504,7 +500,7 @@ describe("UC-203 Opvragen van gebruikersprofiel (ingelogde gebruiker)", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(401);
-        body.should.have.property("status").to.be.equal(401);
+        body.should.have.status(401);
         body.should.have.property("message").to.be.equal("Invalid token!");
         body.should.have.property("data");
         const { data } = body;
@@ -522,7 +518,7 @@ describe("UC-203 Opvragen van gebruikersprofiel (ingelogde gebruiker)", () => {
       .end((err, res) => {
         assert(err === null);
         res.body.should.be.an("object");
-        res.body.should.have.property("status").to.be.equal(200);
+        res.body.should.have.status(200);
         res.body.should.have.property("message");
         res.body.should.have.property("data");
         let { data, message } = res.body;
@@ -569,7 +565,7 @@ describe("UC-204 Opvragen van gebruikersprofiel bij id", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(401);
-        body.should.have.property("status").to.be.equal(401);
+        body.should.have.status(401);
         body.should.have.property("message").to.be.equal("Invalid token!");
         body.should.have.property("data");
         const { data } = body;
@@ -588,7 +584,7 @@ describe("UC-204 Opvragen van gebruikersprofiel bij id", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(404);
-        body.should.have.property("status").to.be.equal(404);
+        body.should.have.status(404);
         body.should.have.property("message").to.be.equal("User not found!");
         body.should.have.property("data");
         const { data } = body;
@@ -607,7 +603,7 @@ describe("UC-204 Opvragen van gebruikersprofiel bij id", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(200);
-        body.should.have.property("status").to.be.equal(200);
+        body.should.have.status(200);
         body.should.have.property("message").to.be.equal("User profile");
         body.should.have.property("data");
         const { data } = body;
@@ -663,7 +659,6 @@ describe("UC-205 Wijzigen van gebruikersprofiel", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(400);
-        body.should.have.property("status").to.be.equal(400);
         body.should.have
           .property("message")
           .to.be.equal("email must be a string");
@@ -698,7 +693,6 @@ describe("UC-205 Wijzigen van gebruikersprofiel", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(403);
-        body.should.have.property("status").to.be.equal(403);
         body.should.have
           .property("message")
           .to.be.equal("Forbidden: You are not the owner of the data!");
@@ -733,7 +727,6 @@ describe("UC-205 Wijzigen van gebruikersprofiel", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(400);
-        body.should.have.property("status").to.be.equal(400);
         body.should.have
           .property("message")
           .to.be.equal("phonenumber must be a 10-digit number(06-12345678)");
@@ -768,7 +761,6 @@ describe("UC-205 Wijzigen van gebruikersprofiel", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(404);
-        body.should.have.property("status").to.be.equal(404);
         body.should.have.property("message").to.be.equal("User not found");
         body.should.have.property("data");
         const { data } = body;
@@ -801,7 +793,6 @@ describe("UC-205 Wijzigen van gebruikersprofiel", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(401);
-        body.should.have.property("status").to.be.equal(401);
         body.should.have.property("message").to.be.equal("Invalid token!");
         body.should.have.property("data");
         const { data } = body;
@@ -834,7 +825,6 @@ describe("UC-205 Wijzigen van gebruikersprofiel", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(200);
-        body.should.have.property("status").to.be.equal(200);
         body.should.have
           .property("message")
           .to.be.equal("User profile updated");
@@ -885,7 +875,6 @@ describe("deleteUser", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(404);
-        body.should.have.property("status").to.be.equal(404);
         body.should.have.property("message").to.be.equal("User not found");
         body.should.have.property("data");
         const { data } = body;
@@ -906,7 +895,6 @@ describe("deleteUser", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(401);
-        body.should.have.property("status").to.be.equal(401);
         body.should.have.property("message").to.be.equal("Invalid token!");
         body.should.have.property("data");
         const { data } = body;
@@ -927,7 +915,6 @@ describe("deleteUser", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(403);
-        body.should.have.property("status").to.be.equal(403);
         body.should.have
           .property("message")
           .to.be.equal("Forbidden: You are not authorized to delete this user");
@@ -950,7 +937,6 @@ describe("deleteUser", () => {
         assert(err === null);
         const { body } = res;
         res.should.have.status(200);
-        body.should.have.property("status").to.be.equal(200);
         body.should.have
           .property("message")
           .to.be.equal("User deleted with id " + userId);

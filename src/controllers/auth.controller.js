@@ -18,8 +18,8 @@ module.exports = {
       if (err) {
         logger.error("Error getting connection from pool");
         next({
-          code: 500,
-          message: err.code,
+          status: 500,
+          message: err.status,
         });
       }
       if (connection) {
@@ -33,7 +33,7 @@ module.exports = {
             if (err) {
               logger.error(err.message);
               next({
-                code: 409,
+                status: 409,
                 message: err.message,
               });
             }
@@ -61,7 +61,7 @@ module.exports = {
                     logger.info("Token gegenereerd: ", token);
                     if (token) {
                       res.status(200).json({
-                        code: 200,
+                        status: 200,
                         message: "Login endpoint",
                         data: {
                           id,
@@ -76,14 +76,14 @@ module.exports = {
               } else if (results.length === 0) {
                 //user niet gevonden
                 next({
-                  code: 404,
+                  status: 404,
                   message: "User not found",
                   data: undefined,
                 });
               } else {
                 //user wel gevonden maar password matcht niet
                 next({
-                  code: 400,
+                  status: 400,
                   message: "Not authorized",
                   data: undefined,
                 });
@@ -130,7 +130,7 @@ module.exports = {
     if (!authHeader) {
       logger.info("No authHeader found!");
       next({
-        code: 401,
+        status: 401,
         message: "Authorization header missing!",
         data: undefined,
       });
@@ -147,7 +147,7 @@ module.exports = {
       if (!payload) {
         logger.info("Invalid token!");
         next({
-          code: 401,
+          status: 401,
           message: "Invalid token!",
           data: undefined,
         });
