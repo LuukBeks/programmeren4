@@ -242,7 +242,7 @@ describe("UC-201 - Registreren als nieuwe user", () => {
         emailAdress: "johny.doe@example.com",
         password: "Welkom123",
         phoneNumber: "0612345678",
-        roles: "guest",
+        roles: "admin",
         street: "straat",
         city: "stad",
       })
@@ -278,7 +278,7 @@ describe("UC-201 - Registreren als nieuwe user", () => {
       emailAdress: "johny.doe@example.com",
       password: "Welkom123",
       phoneNumber: "0612345678",
-      roles: "guest",
+      roles: "admin",
       street: "straat",
       city: "stad",
     };
