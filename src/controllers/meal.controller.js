@@ -668,6 +668,144 @@ const mealController = {
       }
     });
   },
+
+  // uc 403 opvragen van alle deelnemers van een maaltijd
+  getMealParticipants: (req, res, next) => {
+    const mealId = req.params.mealId;
+    logger.trace("Getting participants for meal id", mealId);
+    let sqlStatement =
+      "SELECT u.id, u.firstName, u.lastName, u.isActive, u.emailAdress, u.phoneNumber, u.roles, u.street, u.city FROM `meal_participants_user` mpu JOIN `user` u ON mpu.userId = u.id WHERE mpu.mealId = ?";
+
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error(err.status, err.syscall, err.address, err.port);
+        next({
+          status: 500,
+          message: err.status,
+        });
+      }
+      if (conn) {
+        // Check if the meal exists
+        const checkMealSql = "SELECT * FROM `meal` WHERE `id` = ?";
+        conn.query(checkMealSql, [mealId], function (err, mealResults) {
+          if (err) {
+            logger.error(err.message);
+            next({
+              status: 409,
+              message: err.message,
+            });
+          }
+          if (mealResults && mealResults.length === 0) {
+            logger.info("Meal not found with id:", mealId);
+            res.status(404).json({
+              status: 404,
+              message: "Meal not found",
+              data: {},
+            });
+          } else {
+            conn.query(sqlStatement, [mealId], function (err, results, fields) {
+              if (err) {
+                logger.error(err.message);
+                next({
+                  status: 409,
+                  message: err.message,
+                });
+              }
+              if (results && results.length > 0) {
+                logger.trace("results:", results);
+                res.status(200).json({
+                  status: 200,
+                  message: `Participants for meal with ID ${mealId}`,
+                  data: results,
+                });
+              } else {
+                next({
+                  status: 401,
+                  message: "Not authorized",
+                  data: {},
+                });
+              }
+            });
+          }
+        });
+        conn.release();
+      }
+    });
+  },
+
+  // uc 404 Opvragen van details van deelnemer aan maaltijd
+  getMealParticipantById: (req, res, next) => {
+    const userId = req.params.participantId;
+    const mealId = req.params.mealId;
+    logger.trace(
+      "Getting participant with id",
+      userId,
+      "for meal with id",
+      mealId
+    );
+    let sqlStatement =
+      "SELECT u.id, u.firstName, u.lastName, u.isActive, u.emailAdress, u.phoneNumber, u.roles, u.street, u.city FROM `meal_participants_user` mpu JOIN `user` u ON mpu.userId = u.id WHERE mpu.mealId = ? AND u.id = ?";
+
+    pool.getConnection(function (err, conn) {
+      if (err) {
+        logger.error(err.status, err.syscall, err.address, err.port);
+        next({
+          status: 500,
+          message: err.status,
+        });
+      }
+      if (conn) {
+        // Check if the meal exists
+        const checkMealSql = "SELECT * FROM `meal` WHERE `id` = ?";
+        conn.query(checkMealSql, [mealId], function (err, mealResults) {
+          if (err) {
+            logger.error(err.message);
+            next({
+              status: 409,
+              message: err.message,
+            });
+          }
+          if (mealResults && mealResults.length === 0) {
+            logger.info("Meal not found with id:", mealId);
+            res.status(404).json({
+              status: 404,
+              message: "Meal not found",
+              data: {},
+            });
+          } else {
+            conn.query(
+              sqlStatement,
+              [mealId, userId],
+              function (err, results, fields) {
+                if (err) {
+                  logger.error(err.message);
+                  next({
+                    status: 409,
+                    message: err.message,
+                  });
+                }
+                if (results && results.length > 0) {
+                  logger.trace("results:", results);
+                  res.status(200).json({
+                    status: 200,
+                    message: `Participant with ID ${userId} for meal with ID ${mealId}`,
+                    data: results[0],
+                  });
+                } else {
+                  next({
+                    status: 401,
+                    message: "Not authorized",
+                    data: {},
+                  });
+                }
+              }
+            );
+          }
+        });
+        conn.release();
+      }
+    });
+  },
 };
 
 module.exports = mealController;
