@@ -34,10 +34,10 @@ const userController = {
             typeof req.body.password === "string",
             "password must be a string"
           );
-
+  
           const phoneNumberRegex = /^06(\s|-)?\d{8}$/;
           assert(phoneNumberRegex.test(req.body.phoneNumber), "invalid phone");
-
+  
           assert(
             typeof req.body.phoneNumber === "string",
             "phonenumber must be a string"
@@ -55,14 +55,14 @@ const userController = {
             Number.isInteger(req.body.isActive),
             "isActive must be an integer, 1 or 0"
           );
-
+  
           // Email validation using regex
           const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
           assert(
             emailRegex.test(req.body.emailAdress),
             "emailAdress is invalid"
           );
-
+  
           // Password validation
           const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
           assert(
@@ -70,15 +70,17 @@ const userController = {
             "password must be at least 8 characters, have a capital letter, and a number"
           );
         } catch (err) {
-          logger.warn(err.message.toString());
+          const errorMessage = err.message.toString();
+          logger.warn(errorMessage);
+          console.log(errorMessage); // Logging the error message
           res.status(400).json({
             status: 400,
-            message: err.message.toString(),
+            message: errorMessage,
             data: {},
           });
           return;
         }
-
+  
         // Check if email already exists
         conn.query(
           "SELECT emailAdress FROM user WHERE emailAdress = ?",
