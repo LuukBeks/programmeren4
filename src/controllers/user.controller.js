@@ -13,7 +13,7 @@ const userController = {
         logger.error(err.status, err.syscall, err.address, err.port);
         next({
           status: 500,
-          message: err.status.toString(),
+          message: err.status,
           data: {},
         });
       } else {
@@ -301,7 +301,7 @@ const userController = {
         logger.error(err.status, err.syscall, err.address, err.port);
         next({
           status: 500,
-          message: err.status.toString(),
+          message: err.status,
           data: {},
         });
       }
@@ -311,7 +311,7 @@ const userController = {
             logger.error(err.message);
             next({
               status: 409,
-              message: err.message.toString(),
+              message: err.message,
               data: {},
             });
           } else if (results.length === 0) {
@@ -366,7 +366,7 @@ const userController = {
         logger.error(err.status, err.syscall, err.address, err.port);
         return next({
           status: 500,
-          message: err.status.toString(),
+          message: err.status,
           data: {},
         });
       }
