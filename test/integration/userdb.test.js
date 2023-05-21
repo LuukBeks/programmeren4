@@ -18,7 +18,7 @@ const CLEAR_USERS_TABLE = "DELETE IGNORE FROM `user`;";
 const CLEAR_DB =
   CLEAR_MEAL_TABLE + CLEAR_PARTICIPANTS_TABLE + CLEAR_USERS_TABLE;
 
-const INSERT_USER = "INSERT INTO user (id, firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (6, 'john', 'doe', 1, 'johan.doe@example.com', 'Welkom123', '0612345678', 'admin', '28 straat', 'Eindhoven'), (7, 'jane', 'smith', 0, 'jane.smith@example.com', 'Password123', '0612345678', 'guest', '42 avenue', 'New York')";
+const INSERT_USER = "INSERT INTO user (id, firstName, lastName, isActive, emailAdress, password, phoneNumber, roles, street, city) VALUES (1, 'jeroen', 'doe', 1, 'jeroen.doe@example.com', 'Welkom123', '0612345678', 'admin', '28 straat', 'Eindhoven'), (6, 'john', 'doe', 1, 'johan.doe@example.com', 'Welkom123', '0612345678', 'admin', '28 straat', 'Eindhoven'), (7, 'jane', 'smith', 0, 'jane.smith@example.com', 'Password123', '0612345678', 'guest', '42 avenue', 'New York')";
 
 describe("UC 101 - inloggen", () => {
   before((done) => {
