@@ -244,8 +244,8 @@ const mealController = {
                 if (results && results.affectedRows > 0) {
                   logger.trace(results);
                   logger.info("Found", results.length, "results");
-                  res.status(201).json({
-                    status: 201,
+                  res.status(200).json({
+                    status: 200,
                     message: "Meal updated",
                     data: {
                       meal: {

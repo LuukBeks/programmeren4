@@ -17,8 +17,8 @@ app.use("*", (req, res, next) => {
 
 app.get('/api/info', (req, res) => {
   logger.info('Get server information');
-  res.status(201).json({
-    status: 201,
+  res.status(200).json({
+    status: 200,
     message: 'Server info-endpoint',
     data: {
       studentName: 'Luuk Beks',

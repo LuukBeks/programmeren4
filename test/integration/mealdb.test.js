@@ -320,7 +320,7 @@ describe("UC-302 Wijzigen van maaltijdgegevens", () => {
       .send(meal)
       .set("Authorization", "Bearer " + token)
       .end((err, res) => {
-        res.should.have.status(201);
+        res.should.have.status(200);
         res.body.should.have.property("message", "Meal updated");
         const { meal } = res.body.data;
         meal.should.have.property("mealId", "1");
