@@ -435,7 +435,7 @@ const mealController = {
                   logger.trace("results:", results);
                   res.status(200).json({
                     status: 200,
-                    message: "Meal deleted",
+                    message: `meal deleted with id ${mealId}`,
                     data: {},
                   });
                 } else {

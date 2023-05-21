@@ -521,7 +521,7 @@ describe("UC-305 verwijderen van maaltijd", () => {
       .set("Authorization", "Bearer " + token)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.have.property("message", "Meal deleted");
+        res.body.should.have.property("message", "meal deleted with id 1");
         done();
       });
   });
